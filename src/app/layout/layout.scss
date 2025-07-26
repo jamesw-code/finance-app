@@ -1,0 +1,19 @@
+.app-container {
+  height: 100vh;
+}
+
+.app-sidenav {
+  width: 220px;
+  background-color: #f4f4f4;
+  border-right: 1px solid #ccc;
+}
+
+.app-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-main {
+  padding: 16px;
+}

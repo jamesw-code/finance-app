@@ -1,0 +1,19 @@
+<div class="dashboard">
+  <mat-form-field appearance="fill" class="business-select">
+    <mat-label>Select Business</mat-label>
+    <mat-select [(ngModel)]="selectedBusinessId" (selectionChange)="onSelectBusiness($event.value)">
+      <mat-option *ngFor="let biz of businesses" [value]="biz.id">
+        {{ biz.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="openCreateDialog()">
+    + Create New Business
+  </button>
+
+  <div *ngIf="selectedBusiness">
+    <h2>Welcome to </h2>
+    <!-- show summary, stats, etc -->
+  </div>
+</div>

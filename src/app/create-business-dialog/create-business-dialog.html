@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Create Business</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Business Name</mat-label>
+    <input matInput [(ngModel)]="business.name" />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Tax ID</mat-label>
+    <input matInput [(ngModel)]="business.taxId" />
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onCreate()">Create</button>
+</div>
