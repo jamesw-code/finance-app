@@ -7,7 +7,7 @@ import {MatOption} from '@angular/material/core';
 import {FormsModule} from '@angular/forms';
 import {CreateBusinessDialog} from '../create-business-dialog/create-business-dialog';
 import {MatButton} from '@angular/material/button';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +18,8 @@ import {NgForOf} from '@angular/common';
     FormsModule,
     MatButton,
     MatLabel,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './dashboard.html',
   standalone: true,
