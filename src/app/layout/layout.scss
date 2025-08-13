@@ -4,8 +4,8 @@
 
 .app-sidenav {
   width: 220px;
-  background: linear-gradient(180deg, var(--mat-sys-primary) 0%, var(--mat-sys-secondary) 100%);
-  color: var(--mat-sys-on-primary);
+  background-color: #005cbbff;
+  color: #fff;
   padding-top: 8px;
 
   .app-sidenav-header {
@@ -43,6 +43,8 @@
   top: 0;
   z-index: 1;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  background-color: #005cbbff;
+  color: #fff;
 }
 
 .app-main {
