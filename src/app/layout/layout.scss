@@ -4,16 +4,47 @@
 
 .app-sidenav {
   width: 220px;
-  background-color: #f4f4f4;
-  border-right: 1px solid #ccc;
+  background: linear-gradient(180deg, var(--mat-sys-primary) 0%, var(--mat-sys-secondary) 100%);
+  color: var(--mat-sys-on-primary);
+  padding-top: 8px;
+
+  .app-sidenav-header {
+    background: transparent;
+    color: inherit;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  a.mat-list-item {
+    color: inherit;
+    border-radius: 4px;
+    margin: 4px 8px;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+
+    &.active-link,
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.12);
+    }
+  }
 }
 
 .app-content {
   display: flex;
   flex-direction: column;
   height: 100%;
+  background-color: #fff;
+}
+
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .app-main {
-  padding: 16px;
+  padding: 24px;
 }
