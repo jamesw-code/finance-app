@@ -1,0 +1,35 @@
+@use '@angular/material' as mat;
+
+@mixin theme() {
+  html {
+    @include mat.theme((
+      color: (
+        primary: mat.$violet-palette,
+        tertiary: mat.$azure-palette,
+      ),
+      typography: (
+        brand-family: 'Helvetica Neue, Arial, sans-serif',
+        plain-family: 'Helvetica Neue, Arial, sans-serif',
+      ),
+      density: 0,
+    ));
+
+    /* Stripe-inspired surface and primary accents */
+    --mat-sys-primary: #635bff;
+    --mat-sys-on-primary: #ffffff;
+    --mat-sys-secondary: #00d4ff;
+    --mat-sys-on-secondary: #000000;
+    background-color: #f6f9fc;
+    color-scheme: light;
+    color: var(--mat-sys-on-surface);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  .mat-mdc-raised-button,
+  .mat-mdc-outlined-button,
+  .mat-mdc-flat-button {
+    border-radius: 6px;
+    text-transform: none;
+    font-weight: 500;
+  }
+}
