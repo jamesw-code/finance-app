@@ -18,4 +18,8 @@ export class AccountService {
   createAccount(businessId: number, account: { name: string; accountType?: string }): Observable<Account> {
     return this.http.post<Account>(`${this.baseUrl}/${businessId}/accounts`, account);
   }
+
+  getAccount(businessId: number, accountId: number): Observable<Account> {
+    return this.http.get<Account>(`${this.baseUrl}/${businessId}/accounts/${accountId}`);
+  }
 }

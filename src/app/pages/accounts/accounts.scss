@@ -27,6 +27,15 @@
   gap: 1rem;
 }
 
+.account-list a.mat-mdc-list-item {
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.account-list a.mat-mdc-list-item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;
