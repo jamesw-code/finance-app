@@ -42,6 +42,11 @@ export class Dashboard implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const existingSelection = this.businessService.getSelectedBusiness();
+    if (existingSelection) {
+      this.selectedBusinessId = existingSelection.id;
+      this.selectedBusiness = existingSelection;
+    }
     this.loadBusinesses();
   }
 
@@ -66,6 +71,7 @@ export class Dashboard implements OnInit {
           } else {
             this.selectedBusiness = null;
           }
+          this.businessService.setSelectedBusiness(this.selectedBusiness);
         },
         error: (error) => {
           console.error('Failed to load businesses', error);
@@ -76,6 +82,7 @@ export class Dashboard implements OnInit {
 
   onSelectBusiness(businessId: number) {
     this.selectedBusiness = this.businesses.find(b => b.id === businessId) || null;
+    this.businessService.setSelectedBusiness(this.selectedBusiness);
   }
 
   openCreateDialog() {
@@ -86,6 +93,7 @@ export class Dashboard implements OnInit {
         this.errorMessage = null;
         this.selectedBusinessId = result.id;
         this.selectedBusiness = result;
+        this.businessService.setSelectedBusiness(this.selectedBusiness);
         this.loadBusinesses();
       }
     });

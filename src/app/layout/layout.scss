@@ -8,6 +8,25 @@
   border-right: 1px solid #ccc;
 }
 
+.app-sidenav-toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 16px;
+}
+
+.app-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.selected-business {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  word-break: break-word;
+}
+
 .app-content {
   display: flex;
   flex-direction: column;
