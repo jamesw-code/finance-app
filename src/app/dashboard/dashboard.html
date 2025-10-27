@@ -13,8 +13,15 @@
     + Create New Business
   </button>
 
+  <p *ngIf="isLoading" class="status-message">Loading businesses…</p>
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+
+  <div *ngIf="!isLoading && !errorMessage && businesses.length === 0" class="status-message">
+    No businesses yet. Create one to get started.
+  </div>
+
   <div *ngIf="selectedBusiness">
-    <h2>Welcome to </h2>
-    <!-- show summary, stats, etc -->
+    <h2>Welcome to {{ selectedBusiness.name }}</h2>
+    <p *ngIf="selectedBusiness.taxId">Tax ID: {{ selectedBusiness.taxId }}</p>
   </div>
 </div>
