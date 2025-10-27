@@ -1,0 +1,61 @@
+.account-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.account-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+}
+
+.account-name {
+  margin: 0;
+}
+
+.account-business {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.account-metadata {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.account-metadata div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.account-metadata dt {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.account-metadata dd {
+  margin: 0;
+}
+
+.transactions-placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.state-message {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.error-message {
+  color: #b00020;
+}

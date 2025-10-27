@@ -1,0 +1,39 @@
+<div class="account-detail-page">
+  <div class="page-header">
+    <button mat-stroked-button color="primary" (click)="goBack()">Back to accounts</button>
+    <h2>Account details</h2>
+  </div>
+
+  <ng-container *ngIf="selectedBusiness; else noBusiness">
+    <ng-container *ngIf="account; else accountState">
+      <mat-card class="account-summary">
+        <h3 class="account-name">{{ account.name }}</h3>
+        <p class="account-business">Business: {{ selectedBusiness?.name }}</p>
+        <dl class="account-metadata">
+          <div>
+            <dt>Account ID</dt>
+            <dd>{{ account.id }}</dd>
+          </div>
+          <div>
+            <dt>Account type</dt>
+            <dd>{{ account.accountType || 'Not specified' }}</dd>
+          </div>
+        </dl>
+      </mat-card>
+
+      <section class="transactions-placeholder">
+        <h3>Transactions</h3>
+        <p class="state-message">Transactions will appear here in a future update.</p>
+      </section>
+    </ng-container>
+  </ng-container>
+</div>
+
+<ng-template #accountState>
+  <div *ngIf="isLoading" class="state-message">Loading account details...</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+</ng-template>
+
+<ng-template #noBusiness>
+  <div class="state-message">Select a business before viewing account details.</div>
+</ng-template>

@@ -30,10 +30,14 @@
       <div *ngIf="isLoading" class="state-message">Loading accounts...</div>
       <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
       <mat-list *ngIf="!isLoading && !errorMessage && accounts.length > 0">
-        <mat-list-item *ngFor="let account of accounts">
+        <a
+          mat-list-item
+          *ngFor="let account of accounts"
+          [routerLink]="['/accounts', account.id]"
+        >
           <div matListItemTitle>{{ account.name }}</div>
           <div matListItemLine *ngIf="account.accountType">Type: {{ account.accountType }}</div>
-        </mat-list-item>
+        </a>
       </mat-list>
       <div *ngIf="!isLoading && !errorMessage && accounts.length === 0" class="state-message">
         No accounts have been created for this business yet.
