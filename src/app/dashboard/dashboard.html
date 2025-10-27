@@ -1,17 +1,18 @@
 <div class="dashboard">
-  <mat-form-field appearance="fill" class="business-select">
-    <mat-label>Select Business</mat-label>
-    <mat-select [(ngModel)]="selectedBusinessId" (selectionChange)="onSelectBusiness($event.value)">
-      <mat-option *ngFor="let biz of businesses" [value]="biz.id">
-        {{ biz.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <br>
+  <div class="business-actions">
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      + Create New Business
+    </button>
 
-  <button mat-raised-button color="primary" (click)="openCreateDialog()">
-    + Create New Business
-  </button>
+    <mat-form-field appearance="fill" class="business-select">
+      <mat-label>Select Business</mat-label>
+      <mat-select [(ngModel)]="selectedBusinessId" (selectionChange)="onSelectBusiness($event.value)">
+        <mat-option *ngFor="let biz of businesses" [value]="biz.id">
+          {{ biz.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
   <p *ngIf="isLoading" class="status-message">Loading businesses…</p>
   <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
