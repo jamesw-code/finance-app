@@ -1,47 +1,46 @@
-<mat-card class="categories-card">
-  <h2>Categories</h2>
+<div class="categories-page">
+  <h2 class="page-title">Categories</h2>
+
   <ng-container *ngIf="selectedBusiness; else noBusiness">
-    <div class="categories-grid">
-      <section class="category-list">
-        <h3>{{ selectedBusiness?.name }} categories</h3>
-        <div *ngIf="isLoading" class="state-message">Loading categories...</div>
-        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-        <mat-list *ngIf="!isLoading && !errorMessage && categories.length > 0">
-          <mat-list-item *ngFor="let category of categories">
-            <div matListItemTitle>{{ category.name }}</div>
-            <div matListItemLine *ngIf="category.description">{{ category.description }}</div>
-          </mat-list-item>
-        </mat-list>
-        <div *ngIf="!isLoading && !errorMessage && categories.length === 0" class="state-message">
-          No categories have been created for this business yet.
+    <mat-card class="category-form-card">
+      <h3>Add category</h3>
+      <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Category name</mat-label>
+          <input matInput formControlName="name" placeholder="Utilities" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Description (optional)</mat-label>
+          <input matInput formControlName="description" placeholder="Monthly electric bill" />
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || isSaving">
+            {{ isSaving ? 'Saving...' : 'Add category' }}
+          </button>
         </div>
-      </section>
 
-      <section class="category-form">
-        <h3>Add category</h3>
-        <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
-          <mat-form-field appearance="outline">
-            <mat-label>Category name</mat-label>
-            <input matInput formControlName="name" placeholder="Utilities" />
-          </mat-form-field>
+        <div *ngIf="formError" class="error-message">{{ formError }}</div>
+      </form>
+    </mat-card>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Description (optional)</mat-label>
-            <input matInput formControlName="description" placeholder="Monthly electric bill" />
-          </mat-form-field>
-
-          <div class="actions">
-            <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || isSaving">
-              {{ isSaving ? 'Saving...' : 'Add category' }}
-            </button>
-          </div>
-
-          <div *ngIf="formError" class="error-message">{{ formError }}</div>
-        </form>
-      </section>
-    </div>
+    <section class="category-list">
+      <h3>{{ selectedBusiness?.name }} categories</h3>
+      <div *ngIf="isLoading" class="state-message">Loading categories...</div>
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+      <mat-list *ngIf="!isLoading && !errorMessage && categories.length > 0">
+        <mat-list-item *ngFor="let category of categories">
+          <div matListItemTitle>{{ category.name }}</div>
+          <div matListItemLine *ngIf="category.description">{{ category.description }}</div>
+        </mat-list-item>
+      </mat-list>
+      <div *ngIf="!isLoading && !errorMessage && categories.length === 0" class="state-message">
+        No categories have been created for this business yet.
+      </div>
+    </section>
   </ng-container>
-</mat-card>
+</div>
 
 <ng-template #noBusiness>
   <div class="no-business">

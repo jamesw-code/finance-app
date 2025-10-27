@@ -1,21 +1,27 @@
-.categories-card {
+.categories-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-title {
+  margin: 0;
+}
+
+.category-form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   padding: 1.5rem;
 }
 
-.categories-grid {
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
-
-.category-list,
-.category-form {
+.category-form-card form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.category-form form {
+.category-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;

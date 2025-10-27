@@ -1,21 +1,27 @@
-.accounts-card {
+.accounts-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-title {
+  margin: 0;
+}
+
+.account-form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   padding: 1.5rem;
 }
 
-.accounts-grid {
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
-
-.account-list,
-.account-form {
+.account-form-card form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.account-form form {
+.account-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
