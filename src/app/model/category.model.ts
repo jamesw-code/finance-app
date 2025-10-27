@@ -3,4 +3,5 @@ export interface Category {
   name: string;
   description?: string | null;
   businessId: number;
+  parentCategoryId?: number | null;
 }

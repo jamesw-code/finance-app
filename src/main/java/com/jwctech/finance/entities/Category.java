@@ -36,6 +36,14 @@ public class Category {
     @Column(name = "business_id", insertable = false, updatable = false)
     private Long businessId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_category_id")
+    @JsonIgnore
+    private Category parentCategory;
+
+    @Column(name = "parent_category_id", insertable = false, updatable = false)
+    private Long parentCategoryId;
+
     public Category() {
     }
 

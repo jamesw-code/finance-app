@@ -27,6 +27,25 @@
   gap: 1rem;
 }
 
+.category-tree {
+  display: block;
+}
+
+.subcategory-list {
+  margin-left: 1.5rem;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.subcategory-item {
+  --mat-list-list-item-leading-icon-start-space: 0;
+  --mat-list-list-item-leading-icon-end-space: 0.5rem;
+}
+
+.subcategory-item .mat-mdc-list-item-title {
+  font-weight: 500;
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;
