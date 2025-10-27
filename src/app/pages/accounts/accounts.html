@@ -1,0 +1,50 @@
+<mat-card class="accounts-card">
+  <h2>Accounts</h2>
+  <ng-container *ngIf="selectedBusiness; else noBusiness">
+    <div class="accounts-grid">
+      <section class="account-list">
+        <h3>{{ selectedBusiness?.name }} accounts</h3>
+        <div *ngIf="isLoading" class="state-message">Loading accounts...</div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+        <mat-list *ngIf="!isLoading && !errorMessage && accounts.length > 0">
+          <mat-list-item *ngFor="let account of accounts">
+            <div matListItemTitle>{{ account.name }}</div>
+            <div matListItemLine *ngIf="account.accountType">Type: {{ account.accountType }}</div>
+          </mat-list-item>
+        </mat-list>
+        <div *ngIf="!isLoading && !errorMessage && accounts.length === 0" class="state-message">
+          No accounts have been created for this business yet.
+        </div>
+      </section>
+
+      <section class="account-form">
+        <h3>Add account</h3>
+        <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline">
+            <mat-label>Account name</mat-label>
+            <input matInput formControlName="name" placeholder="Operating account" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Account type (optional)</mat-label>
+            <input matInput formControlName="accountType" placeholder="Checking" />
+          </mat-form-field>
+
+          <div class="actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="accountForm.invalid || isSaving">
+              {{ isSaving ? 'Saving...' : 'Add account' }}
+            </button>
+          </div>
+
+          <div *ngIf="formError" class="error-message">{{ formError }}</div>
+        </form>
+      </section>
+    </div>
+  </ng-container>
+</mat-card>
+
+<ng-template #noBusiness>
+  <div class="no-business">
+    <p>Select or create a business before managing accounts.</p>
+  </div>
+</ng-template>
