@@ -1,6 +1,6 @@
 package com.jwctech.finance.controllers;
 
-import com.jwctech.finance.entities.Account;
+import com.jwctech.finance.dto.AccountDto;
 import com.jwctech.finance.services.AccountService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -26,14 +26,14 @@ public class AccountController {
     }
 
     @GetMapping
-    public List<Account> getAccounts(@PathVariable Long businessId) {
+    public List<AccountDto> getAccounts(@PathVariable Long businessId) {
         return accountService.getAccounts(businessId);
     }
 
     @PostMapping
-    public ResponseEntity<Account> createAccount(@PathVariable Long businessId,
-                                                 @Valid @RequestBody CreateAccountRequest request) {
-        Account savedAccount = accountService.createAccount(businessId, request.name(), request.accountType());
+    public ResponseEntity<AccountDto> createAccount(@PathVariable Long businessId,
+                                                    @Valid @RequestBody CreateAccountRequest request) {
+        AccountDto savedAccount = accountService.createAccount(businessId, request.name(), request.accountType());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAccount);
     }
 

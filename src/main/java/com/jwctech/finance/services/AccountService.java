@@ -1,5 +1,6 @@
 package com.jwctech.finance.services;
 
+import com.jwctech.finance.dto.AccountDto;
 import com.jwctech.finance.entities.Account;
 import com.jwctech.finance.entities.Business;
 import com.jwctech.finance.repositories.AccountRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
@@ -21,19 +23,22 @@ public class AccountService {
         this.businessRepository = businessRepository;
     }
 
-    public List<Account> getAccounts(Long businessId) {
+    public List<AccountDto> getAccounts(Long businessId) {
         if (!businessRepository.existsById(businessId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business not found.");
         }
-        return accountRepository.findByBusinessIdOrderByNameAsc(businessId);
+        return accountRepository.findByBusiness_IdOrderByNameAsc(businessId)
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
-    public Account createAccount(Long businessId, String name, String accountType) {
+    public AccountDto createAccount(Long businessId, String name, String accountType) {
         Business business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Business not found."));
 
         String trimmedName = name.trim();
-        if (accountRepository.existsByNameIgnoreCaseAndBusinessId(trimmedName, businessId)) {
+        if (accountRepository.existsByNameIgnoreCaseAndBusiness_Id(trimmedName, businessId)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "An account with that name already exists for this business.");
         }
@@ -47,6 +52,17 @@ public class AccountService {
         }
         account.setBusiness(business);
 
-        return accountRepository.save(account);
+        Account savedAccount = accountRepository.save(account);
+        return toDto(savedAccount);
+    }
+
+    private AccountDto toDto(Account account) {
+        Long businessId = account.getBusiness() != null ? account.getBusiness().getId() : null;
+        return new AccountDto(
+                account.getId(),
+                account.getName(),
+                account.getAccountType(),
+                businessId
+        );
     }
 }

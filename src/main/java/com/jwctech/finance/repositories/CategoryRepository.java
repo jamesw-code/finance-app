@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    List<Category> findByBusinessIdOrderByNameAsc(Long businessId);
+    List<Category> findByBusiness_IdOrderByNameAsc(Long businessId);
 
-    boolean existsByNameIgnoreCaseAndBusinessId(String name, Long businessId);
+    boolean existsByNameIgnoreCaseAndBusiness_Id(String name, Long businessId);
 
-    Optional<Category> findByIdAndBusinessId(Long id, Long businessId);
+    Optional<Category> findByIdAndBusiness_Id(Long id, Long businessId);
 }

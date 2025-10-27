@@ -27,7 +27,7 @@ public class CategoryService {
         if (!businessRepository.existsById(businessId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business not found.");
         }
-        return categoryRepository.findByBusinessIdOrderByNameAsc(businessId)
+        return categoryRepository.findByBusiness_IdOrderByNameAsc(businessId)
                 .stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
@@ -38,14 +38,14 @@ public class CategoryService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Business not found."));
 
         String trimmedName = name.trim();
-        if (categoryRepository.existsByNameIgnoreCaseAndBusinessId(trimmedName, businessId)) {
+        if (categoryRepository.existsByNameIgnoreCaseAndBusiness_Id(trimmedName, businessId)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "A category with that name already exists for this business.");
         }
 
         Category parentCategory = null;
         if (parentCategoryId != null) {
-            parentCategory = categoryRepository.findByIdAndBusinessId(parentCategoryId, businessId)
+            parentCategory = categoryRepository.findByIdAndBusiness_Id(parentCategoryId, businessId)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
                             "Parent category not found for this business."));
         }
@@ -65,13 +65,11 @@ public class CategoryService {
     }
 
     private CategoryDto toDto(Category category) {
-        Long businessId = category.getBusinessId() != null
-                ? category.getBusinessId()
-                : (category.getBusiness() != null ? category.getBusiness().getId() : null);
+        Long businessId = category.getBusiness() != null ? category.getBusiness().getId() : null;
 
-        Long parentCategoryId = category.getParentCategoryId() != null
-                ? category.getParentCategoryId()
-                : (category.getParentCategory() != null ? category.getParentCategory().getId() : null);
+        Long parentCategoryId = category.getParentCategory() != null
+                ? category.getParentCategory().getId()
+                : null;
 
         return new CategoryDto(
                 category.getId(),

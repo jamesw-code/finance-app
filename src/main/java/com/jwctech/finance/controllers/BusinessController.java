@@ -1,6 +1,6 @@
 package com.jwctech.finance.controllers;
 
-import com.jwctech.finance.entities.Business;
+import com.jwctech.finance.dto.BusinessDto;
 import com.jwctech.finance.services.BusinessService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -25,13 +25,13 @@ public class BusinessController {
     }
 
     @GetMapping
-    public List<Business> getBusinesses() {
+    public List<BusinessDto> getBusinesses() {
         return businessService.getBusinesses();
     }
 
     @PostMapping
-    public ResponseEntity<Business> createBusiness(@Valid @RequestBody CreateBusinessRequest request) {
-        Business savedBusiness = businessService.createBusiness(request.name(), request.taxId());
+    public ResponseEntity<BusinessDto> createBusiness(@Valid @RequestBody CreateBusinessRequest request) {
+        BusinessDto savedBusiness = businessService.createBusiness(request.name(), request.taxId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBusiness);
     }
 
