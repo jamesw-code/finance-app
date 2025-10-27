@@ -3,7 +3,7 @@
   <ng-container *ngIf="selectedBusiness; else noBusiness">
     <div class="accounts-grid">
       <section class="account-list">
-        <h3>{{ selectedBusiness?.name }} accounts</h3>
+        <h3>{{ selectedBusiness.name }} accounts</h3>
         <div *ngIf="isLoading" class="state-message">Loading accounts...</div>
         <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
         <mat-list *ngIf="!isLoading && !errorMessage && accounts.length > 0">
