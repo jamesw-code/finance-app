@@ -33,10 +33,11 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<Category> createCategory(@PathVariable Long businessId,
                                                    @Valid @RequestBody CreateCategoryRequest request) {
-        Category savedCategory = categoryService.createCategory(businessId, request.name(), request.description());
+        Category savedCategory = categoryService.createCategory(businessId,
+                request.name(), request.description(), request.parentCategoryId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
 
-    public record CreateCategoryRequest(@NotBlank String name, String description) {
+    public record CreateCategoryRequest(@NotBlank String name, String description, Long parentCategoryId) {
     }
 }

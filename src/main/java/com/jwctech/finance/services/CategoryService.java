@@ -28,7 +28,7 @@ public class CategoryService {
         return categoryRepository.findByBusinessIdOrderByNameAsc(businessId);
     }
 
-    public Category createCategory(Long businessId, String name, String description) {
+    public Category createCategory(Long businessId, String name, String description, Long parentCategoryId) {
         Business business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Business not found."));
 
@@ -36,6 +36,13 @@ public class CategoryService {
         if (categoryRepository.existsByNameIgnoreCaseAndBusinessId(trimmedName, businessId)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "A category with that name already exists for this business.");
+        }
+
+        Category parentCategory = null;
+        if (parentCategoryId != null) {
+            parentCategory = categoryRepository.findByIdAndBusinessId(parentCategoryId, businessId)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "Parent category not found for this business."));
         }
 
         Category category = new Category();
@@ -46,6 +53,7 @@ public class CategoryService {
             category.setDescription(null);
         }
         category.setBusiness(business);
+        category.setParentCategory(parentCategory);
 
         return categoryRepository.save(category);
     }

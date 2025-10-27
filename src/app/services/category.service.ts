@@ -17,7 +17,7 @@ export class CategoryService {
 
   createCategory(
     businessId: number,
-    category: { name: string; description?: string }
+    category: { name: string; description?: string; parentCategoryId?: number | null }
   ): Observable<Category> {
     return this.http.post<Category>(`${this.baseUrl}/${businessId}/categories`, category);
   }

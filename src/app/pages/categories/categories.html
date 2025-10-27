@@ -15,6 +15,16 @@
           <input matInput formControlName="description" placeholder="Monthly electric bill" />
         </mat-form-field>
 
+        <mat-form-field appearance="outline">
+          <mat-label>Parent category (optional)</mat-label>
+          <mat-select formControlName="parentCategoryId">
+            <mat-option [value]="null">No parent</mat-option>
+            <mat-option *ngFor="let option of parentCategoryOptions" [value]="option.id">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <div class="actions">
           <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || isSaving">
             {{ isSaving ? 'Saving...' : 'Add category' }}
@@ -29,13 +39,14 @@
       <h3>{{ selectedBusiness?.name }} categories</h3>
       <div *ngIf="isLoading" class="state-message">Loading categories...</div>
       <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-      <mat-list *ngIf="!isLoading && !errorMessage && categories.length > 0">
-        <mat-list-item *ngFor="let category of categories">
-          <div matListItemTitle>{{ category.name }}</div>
-          <div matListItemLine *ngIf="category.description">{{ category.description }}</div>
-        </mat-list-item>
+      <mat-list *ngIf="!isLoading && !errorMessage && categoryTree.length > 0" class="category-tree">
+        <ng-container *ngFor="let category of categoryTree">
+          <ng-container
+            *ngTemplateOutlet="categoryNode; context: { $implicit: category, level: 0 }"
+          ></ng-container>
+        </ng-container>
       </mat-list>
-      <div *ngIf="!isLoading && !errorMessage && categories.length === 0" class="state-message">
+      <div *ngIf="!isLoading && !errorMessage && flatCategories.length === 0" class="state-message">
         No categories have been created for this business yet.
       </div>
     </section>
@@ -45,5 +56,21 @@
 <ng-template #noBusiness>
   <div class="no-business">
     <p>Select or create a business before managing categories.</p>
+  </div>
+</ng-template>
+
+<ng-template #categoryNode let-node let-level="level">
+  <mat-list-item [ngClass]="{ 'subcategory-item': level > 0 }">
+    <div matListItemTitle>{{ node.name }}</div>
+    <div matListItemLine *ngIf="node.description">{{ node.description }}</div>
+  </mat-list-item>
+  <div class="subcategory-list" *ngIf="node.subcategories.length > 0">
+    <mat-list>
+      <ng-container *ngFor="let child of node.subcategories">
+        <ng-container
+          *ngTemplateOutlet="categoryNode; context: { $implicit: child, level: level + 1 }"
+        ></ng-container>
+      </ng-container>
+    </mat-list>
   </div>
 </ng-template>
