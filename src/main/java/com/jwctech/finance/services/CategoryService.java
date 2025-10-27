@@ -1,5 +1,6 @@
 package com.jwctech.finance.services;
 
+import com.jwctech.finance.dto.CategoryDto;
 import com.jwctech.finance.entities.Business;
 import com.jwctech.finance.entities.Category;
 import com.jwctech.finance.repositories.BusinessRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -21,14 +23,17 @@ public class CategoryService {
         this.businessRepository = businessRepository;
     }
 
-    public List<Category> getCategories(Long businessId) {
+    public List<CategoryDto> getCategories(Long businessId) {
         if (!businessRepository.existsById(businessId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business not found.");
         }
-        return categoryRepository.findByBusinessIdOrderByNameAsc(businessId);
+        return categoryRepository.findByBusinessIdOrderByNameAsc(businessId)
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
-    public Category createCategory(Long businessId, String name, String description, Long parentCategoryId) {
+    public CategoryDto createCategory(Long businessId, String name, String description, Long parentCategoryId) {
         Business business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Business not found."));
 
@@ -55,6 +60,25 @@ public class CategoryService {
         category.setBusiness(business);
         category.setParentCategory(parentCategory);
 
-        return categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(category);
+        return toDto(savedCategory);
+    }
+
+    private CategoryDto toDto(Category category) {
+        Long businessId = category.getBusinessId() != null
+                ? category.getBusinessId()
+                : (category.getBusiness() != null ? category.getBusiness().getId() : null);
+
+        Long parentCategoryId = category.getParentCategoryId() != null
+                ? category.getParentCategoryId()
+                : (category.getParentCategory() != null ? category.getParentCategory().getId() : null);
+
+        return new CategoryDto(
+                category.getId(),
+                category.getName(),
+                category.getDescription(),
+                businessId,
+                parentCategoryId
+        );
     }
 }

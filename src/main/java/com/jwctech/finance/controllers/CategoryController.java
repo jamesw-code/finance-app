@@ -1,6 +1,6 @@
 package com.jwctech.finance.controllers;
 
-import com.jwctech.finance.entities.Category;
+import com.jwctech.finance.dto.CategoryDto;
 import com.jwctech.finance.services.CategoryService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -26,14 +26,14 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> getCategories(@PathVariable Long businessId) {
+    public List<CategoryDto> getCategories(@PathVariable Long businessId) {
         return categoryService.getCategories(businessId);
     }
 
     @PostMapping
-    public ResponseEntity<Category> createCategory(@PathVariable Long businessId,
-                                                   @Valid @RequestBody CreateCategoryRequest request) {
-        Category savedCategory = categoryService.createCategory(businessId,
+    public ResponseEntity<CategoryDto> createCategory(@PathVariable Long businessId,
+                                                      @Valid @RequestBody CreateCategoryRequest request) {
+        CategoryDto savedCategory = categoryService.createCategory(businessId,
                 request.name(), request.description(), request.parentCategoryId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
