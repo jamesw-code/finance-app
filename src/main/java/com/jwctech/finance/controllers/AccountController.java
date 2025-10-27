@@ -1,9 +1,7 @@
 package com.jwctech.finance.controllers;
 
 import com.jwctech.finance.entities.Account;
-import com.jwctech.finance.entities.Business;
-import com.jwctech.finance.repositories.AccountRepository;
-import com.jwctech.finance.repositories.BusinessRepository;
+import com.jwctech.finance.services.AccountService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -22,44 +19,21 @@ import java.util.List;
 @RequestMapping("/api/businesses/{businessId}/accounts")
 public class AccountController {
 
-    private final AccountRepository accountRepository;
-    private final BusinessRepository businessRepository;
+    private final AccountService accountService;
 
-    public AccountController(AccountRepository accountRepository, BusinessRepository businessRepository) {
-        this.accountRepository = accountRepository;
-        this.businessRepository = businessRepository;
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     @GetMapping
     public List<Account> getAccounts(@PathVariable Long businessId) {
-        if (!businessRepository.existsById(businessId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business not found.");
-        }
-        return accountRepository.findByBusinessIdOrderByNameAsc(businessId);
+        return accountService.getAccounts(businessId);
     }
 
     @PostMapping
     public ResponseEntity<Account> createAccount(@PathVariable Long businessId,
                                                  @Valid @RequestBody CreateAccountRequest request) {
-        Business business = businessRepository.findById(businessId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Business not found."));
-
-        String trimmedName = request.name().trim();
-        if (accountRepository.existsByNameIgnoreCaseAndBusinessId(trimmedName, businessId)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,
-                    "An account with that name already exists for this business.");
-        }
-
-        Account account = new Account();
-        account.setName(trimmedName);
-        if (request.accountType() != null && !request.accountType().isBlank()) {
-            account.setAccountType(request.accountType().trim());
-        } else {
-            account.setAccountType(null);
-        }
-        account.setBusiness(business);
-
-        Account savedAccount = accountRepository.save(account);
+        Account savedAccount = accountService.createAccount(businessId, request.name(), request.accountType());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedAccount);
     }
 
