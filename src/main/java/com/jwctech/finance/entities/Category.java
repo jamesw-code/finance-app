@@ -30,15 +30,9 @@ public class Category {
     @JoinColumn(name = "business_id", nullable = false)
     private Business business;
 
-    @Column(name = "business_id", insertable = false, updatable = false)
-    private Long businessId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_category_id")
     private Category parentCategory;
-
-    @Column(name = "parent_category_id", insertable = false, updatable = false)
-    private Long parentCategoryId;
 
     public Category() {
     }

@@ -1,5 +1,6 @@
 package com.jwctech.finance.services;
 
+import com.jwctech.finance.dto.BusinessDto;
 import com.jwctech.finance.entities.Business;
 import com.jwctech.finance.repositories.BusinessRepository;
 import org.springframework.data.domain.Sort;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BusinessService {
@@ -18,11 +20,14 @@ public class BusinessService {
         this.businessRepository = businessRepository;
     }
 
-    public List<Business> getBusinesses() {
-        return businessRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+    public List<BusinessDto> getBusinesses() {
+        return businessRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
-    public Business createBusiness(String name, String taxId) {
+    public BusinessDto createBusiness(String name, String taxId) {
         String trimmedName = name.trim();
         if (businessRepository.existsByNameIgnoreCase(trimmedName)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "A business with that name already exists.");
@@ -36,6 +41,15 @@ public class BusinessService {
             business.setTaxId(null);
         }
 
-        return businessRepository.save(business);
+        Business savedBusiness = businessRepository.save(business);
+        return toDto(savedBusiness);
+    }
+
+    private BusinessDto toDto(Business business) {
+        return new BusinessDto(
+                business.getId(),
+                business.getName(),
+                business.getTaxId()
+        );
     }
 }

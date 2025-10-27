@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    List<Account> findByBusinessIdOrderByNameAsc(Long businessId);
+    List<Account> findByBusiness_IdOrderByNameAsc(Long businessId);
 
-    boolean existsByNameIgnoreCaseAndBusinessId(String name, Long businessId);
+    boolean existsByNameIgnoreCaseAndBusiness_Id(String name, Long businessId);
 }
