@@ -13,8 +13,13 @@ describe('Dashboard', () => {
   beforeEach(async () => {
     dialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
     dialogSpy.open.and.returnValue({ afterClosed: () => of(null) } as any);
-    businessServiceSpy = jasmine.createSpyObj('BusinessService', ['getBusinesses']);
+    businessServiceSpy = jasmine.createSpyObj(
+      'BusinessService',
+      ['getBusinesses', 'setSelectedBusiness', 'getSelectedBusiness'],
+      { selectedBusiness$: of(null) }
+    );
     businessServiceSpy.getBusinesses.and.returnValue(of([]));
+    businessServiceSpy.getSelectedBusiness.and.returnValue(null);
 
     await TestBed.configureTestingModule({
       imports: [Dashboard],
