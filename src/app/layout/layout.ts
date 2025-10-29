@@ -5,7 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { BusinessService } from '../services/business.service';
 
 @Component({
@@ -20,7 +20,7 @@ import { BusinessService } from '../services/business.service';
     MatListModule,
     MatIconModule,
     MatButtonModule,
-    NgIf,
+    CommonModule,
     AsyncPipe
   ]
 })

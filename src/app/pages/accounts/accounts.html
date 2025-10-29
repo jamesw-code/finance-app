@@ -1,7 +1,7 @@
 <div class="accounts-page">
   <h2 class="page-title">Accounts</h2>
 
-  <ng-container *ngIf="selectedBusiness; else noBusiness">
+  @if (selectedBusiness) {
     <mat-card class="account-form-card">
       <h3>Add account</h3>
       <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
@@ -21,33 +21,41 @@
           </button>
         </div>
 
-        <div *ngIf="formError" class="error-message">{{ formError }}</div>
+        @if (formError) {
+          <div class="error-message">{{ formError }}</div>
+        }
       </form>
     </mat-card>
 
     <section class="account-list">
       <h3>{{ selectedBusiness.name }} accounts</h3>
-      <div *ngIf="isLoading" class="state-message">Loading accounts...</div>
-      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-      <mat-list *ngIf="!isLoading && !errorMessage && accounts.length > 0">
-        <a
-          mat-list-item
-          *ngFor="let account of accounts"
-          [routerLink]="['/accounts', account.id]"
-        >
-          <div matListItemTitle>{{ account.name }}</div>
-          <div matListItemLine *ngIf="account.accountType">Type: {{ account.accountType }}</div>
-        </a>
-      </mat-list>
-      <div *ngIf="!isLoading && !errorMessage && accounts.length === 0" class="state-message">
-        No accounts have been created for this business yet.
-      </div>
+      @if (isLoading) {
+        <div class="state-message">Loading accounts...</div>
+      }
+      @if (errorMessage) {
+        <div class="error-message">{{ errorMessage }}</div>
+      }
+      @if (!isLoading && !errorMessage && accounts.length > 0) {
+        <mat-list>
+          @for (account of accounts; track account.id) {
+            <a mat-list-item [routerLink]="['/accounts', account.id]">
+              <div matListItemTitle>{{ account.name }}</div>
+              @if (account.accountType) {
+                <div matListItemLine>Type: {{ account.accountType }}</div>
+              }
+            </a>
+          }
+        </mat-list>
+      }
+      @if (!isLoading && !errorMessage && accounts.length === 0) {
+        <div class="state-message">
+          No accounts have been created for this business yet.
+        </div>
+      }
     </section>
-  </ng-container>
+  } @else {
+    <div class="no-business">
+      <p>Select or create a business before managing accounts.</p>
+    </div>
+  }
 </div>
-
-<ng-template #noBusiness>
-  <div class="no-business">
-    <p>Select or create a business before managing accounts.</p>
-  </div>
-</ng-template>

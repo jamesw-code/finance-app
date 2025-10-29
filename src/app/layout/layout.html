@@ -2,9 +2,11 @@
   <mat-sidenav mode="side" opened class="app-sidenav">
     <mat-toolbar color="primary" class="app-sidenav-toolbar">
       <div class="app-title">Finance App</div>
-      <div class="selected-business" *ngIf="(selectedBusiness$ | async) as selectedBusiness">
-        {{ selectedBusiness?.name }}
-      </div>
+      @if (selectedBusiness$ | async; as selectedBusiness) {
+        <div class="selected-business">
+          {{ selectedBusiness.name }}
+        </div>
+      }
     </mat-toolbar>
 
     <mat-nav-list>
