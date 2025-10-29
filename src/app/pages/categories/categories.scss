@@ -4,27 +4,42 @@
   gap: 1.5rem;
 }
 
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .page-title {
   margin: 0;
 }
 
-.category-form-card {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 1.5rem;
-}
-
-.category-form-card form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.add-category-button {
+  margin-left: auto;
 }
 
 .category-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.add-category-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.add-category-form mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dialog-description {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .category-tree {
@@ -44,11 +59,6 @@
 
 .subcategory-item .mat-mdc-list-item-title {
   font-weight: 500;
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
 }
 
 .state-message {
