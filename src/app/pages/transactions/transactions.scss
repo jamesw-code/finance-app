@@ -1,0 +1,50 @@
+.transactions-page {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 32px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.page-subtitle {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.blank-state {
+  border: 1px dashed rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 40px 32px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.blank-state h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.blank-state p {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.state-message {
+  font-weight: 500;
+}
