@@ -33,6 +33,12 @@ public class AccountService {
                 .collect(Collectors.toList());
     }
 
+    public AccountDto getAccount(Long businessId, Long accountId) {
+        Account account = accountRepository.findByIdAndBusiness_Id(accountId, businessId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found."));
+        return toDto(account);
+    }
+
     public AccountDto createAccount(Long businessId, String name, String accountType) {
         Business business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Business not found."));
