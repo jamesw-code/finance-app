@@ -7,8 +7,9 @@ import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { finalize, Subscription } from 'rxjs';
-import { Category } from '../../model/category.model';
+import { Category, CategoryKind } from '../../model/category.model';
 import { Business } from '../../model/business.model';
 import { CategoryService } from '../../services/category.service';
 import { BusinessService } from '../../services/business.service';
@@ -38,7 +39,8 @@ interface CategoryOption {
     MatLabel,
     MatButton,
     MatListModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCheckboxModule
   ]
 })
 export class Categories implements OnInit, OnDestroy {
@@ -51,11 +53,21 @@ export class Categories implements OnInit, OnDestroy {
   isSaving = false;
   errorMessage: string | null = null;
   formError: string | null = null;
+  readonly categoryKinds = Object.values(CategoryKind);
+  readonly categoryKindOptions = this.categoryKinds.map((kind) => ({
+    value: kind,
+    label: kind
+      .toLowerCase()
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, (char) => char.toUpperCase())
+  }));
 
   readonly categoryForm = this.fb.group({
     name: this.fb.nonNullable.control('', Validators.required),
     description: this.fb.control(''),
-    parentCategoryId: this.fb.control<number | null>(null)
+    parentCategoryId: this.fb.control<number | null>(null),
+    kind: this.fb.control<CategoryKind | null>(null, { validators: [Validators.required] }),
+    active: this.fb.nonNullable.control(true)
   });
 
   private readonly subscriptions = new Subscription();
@@ -124,7 +136,7 @@ export class Categories implements OnInit, OnDestroy {
       return;
     }
 
-    const { name, description, parentCategoryId } = this.categoryForm.getRawValue();
+    const { name, description, parentCategoryId, kind, active } = this.categoryForm.getRawValue();
     const trimmedName = (name ?? '').trim();
     if (!trimmedName) {
       this.formError = 'Category name is required.';
@@ -132,8 +144,22 @@ export class Categories implements OnInit, OnDestroy {
       return;
     }
 
-    const payload: { name: string; description?: string; parentCategoryId?: number | null } = {
-      name: trimmedName
+    if (!kind) {
+      this.formError = 'Select a category kind.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    const payload: {
+      name: string;
+      description?: string;
+      parentCategoryId?: number | null;
+      kind: CategoryKind;
+      active: boolean;
+    } = {
+      name: trimmedName,
+      kind,
+      active: active ?? true
     };
     if (description && description.trim().length > 0) {
       payload.description = description.trim();
@@ -154,7 +180,13 @@ export class Categories implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (createdCategory) => {
-          this.categoryForm.reset({ name: '', description: '', parentCategoryId: null });
+          this.categoryForm.reset({
+            name: '',
+            description: '',
+            parentCategoryId: null,
+            kind: null,
+            active: true
+          });
           this.updateCategoryStructures([...this.flatCategories, createdCategory]);
         },
         error: (error) => {
@@ -235,5 +267,10 @@ export class Categories implements OnInit, OnDestroy {
 
     traverse(nodes, 0);
     return options;
+  }
+
+  getKindLabel(kind: CategoryKind): string {
+    const match = this.categoryKindOptions.find((option) => option.value === kind);
+    return match?.label ?? kind;
   }
 }
