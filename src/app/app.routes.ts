@@ -4,6 +4,7 @@ import {Dashboard} from './dashboard/dashboard';
 import {Accounts} from './pages/accounts/accounts';
 import {AccountDetail} from './pages/accounts/account-detail/account-detail';
 import {Categories} from './pages/categories/categories';
+import {Transactions} from './pages/transactions/transactions';
 import {NotFound} from './pages/not-found/not-found';
 
 export const routes: Routes = [
@@ -12,7 +13,7 @@ export const routes: Routes = [
     component: Layout,
     children: [
       { path: 'dashboard', component: Dashboard },
-      // { path: 'transactions', component: TransactionsComponent },
+      { path: 'transactions', component: Transactions },
       { path: 'accounts/:accountId', component: AccountDetail },
       { path: 'accounts', component: Accounts },
       { path: 'categories', component: Categories },
