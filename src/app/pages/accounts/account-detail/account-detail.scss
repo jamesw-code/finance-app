@@ -1,7 +1,7 @@
 .account-detail-page {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 24px;
 }
 
 .page-header {
@@ -13,8 +13,16 @@
 .account-summary {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 1.5rem;
+  gap: 1.5rem;
+  padding: 1.75rem;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .account-name {
@@ -30,6 +38,7 @@
   display: grid;
   gap: 0.75rem;
   margin: 0;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
 .account-metadata div {
@@ -46,10 +55,22 @@
   margin: 0;
 }
 
-.transactions-placeholder {
+.transactions-section {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.section-header h3 {
+  margin: 0;
 }
 
 .state-message {
@@ -58,4 +79,90 @@
 
 .error-message {
   color: #b00020;
+  font-weight: 600;
+}
+
+.transaction-table-wrapper {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow: auto;
+  background: #fff;
+}
+
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+}
+
+.transaction-table thead {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.transaction-table th,
+.transaction-table td {
+  text-align: left;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.transaction-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.primary {
+  font-weight: 600;
+}
+
+.secondary {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.875rem;
+}
+
+.amount-column {
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .summary-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .transaction-table {
+    min-width: 100%;
+  }
+
+  .transaction-table thead {
+    display: none;
+  }
+
+  .transaction-table tbody tr {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .transaction-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .transaction-table td {
+    padding: 0;
+    border: none;
+  }
+
+  .transaction-table td::before {
+    content: attr(data-title);
+    display: block;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 4px;
+  }
+
+  .amount-column {
+    justify-self: end;
+  }
 }

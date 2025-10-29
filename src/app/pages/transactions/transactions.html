@@ -1,15 +1,72 @@
 <div class="transactions-page">
-  <header class="page-header">
-    <h1>Transactions</h1>
-    <p class="page-subtitle">Track your business cash flow in one place.</p>
-  </header>
+  <div class="page-header">
+    <div class="page-heading">
+      <h1>Transactions</h1>
+      <p class="page-subtitle">Review every transaction recorded for the selected business.</p>
+    </div>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="openAddTransactionDialog()"
+      [disabled]="!selectedBusiness"
+    >
+      Add transaction
+    </button>
+  </div>
 
-  <section class="blank-state">
-    <h2>Coming soon</h2>
-    <p>We're building the tools to review, categorize, and reconcile your transactions.</p>
-    <p class="state-message">Check back soon to manage your business activity right here.</p>
-    <p class="state-message">
-      In the meantime, add your vendors so transactions are easier to categorize later.
-    </p>
-  </section>
+  @if (!selectedBusiness) {
+    <section class="state-card">
+      <h2>Select a business</h2>
+      <p>Choose a business to view and create transactions.</p>
+    </section>
+  } @else {
+    @if (isLoading) {
+      <div class="state-message">Loading transactions...</div>
+    } @else if (errorMessage) {
+      <div class="error-message">{{ errorMessage }}</div>
+    } @else if (!transactions.length) {
+      <section class="state-card">
+        <h2>No transactions yet</h2>
+        <p>Record your first transaction to start tracking this account activity.</p>
+      </section>
+    } @else {
+      <div class="transaction-table-wrapper">
+        <table class="transaction-table">
+          <thead>
+            <tr>
+              <th scope="col">Posted</th>
+              <th scope="col">Account</th>
+              <th scope="col">Payee</th>
+              <th scope="col">Memo</th>
+              <th scope="col" class="amount-column">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (transaction of transactions; track trackByTransactionId($index, transaction)) {
+              <tr>
+                <td data-title="Posted">{{ transaction.postedAt | date: 'mediumDate' }}</td>
+                <td data-title="Account">
+                  <a [routerLink]="['/accounts', transaction.accountId]">
+                    {{ transaction.accountName || ('Account #' + transaction.accountId) }}
+                  </a>
+                </td>
+                <td data-title="Payee">
+                  <div class="primary">{{ transaction.payee }}</div>
+                  @if (transaction.vendorName) {
+                    <div class="secondary">Vendor: {{ transaction.vendorName }}</div>
+                  }
+                </td>
+                <td data-title="Memo">
+                  {{ transaction.memo || '—' }}
+                </td>
+                <td data-title="Amount" class="amount-column">
+                  {{ transaction.amount | currency: 'USD':'symbol':'1.2-2' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
 </div>
