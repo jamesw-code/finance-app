@@ -7,6 +7,7 @@ import {Categories} from './pages/categories/categories';
 import {Transactions} from './pages/transactions/transactions';
 import {Vendors} from './pages/vendors/vendors';
 import {NotFound} from './pages/not-found/not-found';
+import {Reports} from './pages/reports/reports';
 
 export const routes: Routes = [
   {
@@ -19,7 +20,7 @@ export const routes: Routes = [
       { path: 'accounts/:accountId', component: AccountDetail },
       { path: 'accounts', component: Accounts },
       { path: 'categories', component: Categories },
-      // { path: 'reports', component: ReportsComponent },
+      { path: 'reports', component: Reports },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
