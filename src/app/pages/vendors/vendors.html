@@ -1,0 +1,84 @@
+<div class="vendors-page">
+  <h2 class="page-title">Vendors</h2>
+
+  @if (selectedBusiness) {
+    <mat-card class="vendor-form-card">
+      <h3>Add vendor</h3>
+      <form [formGroup]="vendorForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Vendor name</mat-label>
+          <input matInput formControlName="name" placeholder="Acme Supplies" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contact name (optional)</mat-label>
+          <input matInput formControlName="contactName" placeholder="Jane Doe" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email (optional)</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="vendor@example.com" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Phone (optional)</mat-label>
+          <input matInput formControlName="phone" placeholder="(555) 123-4567" />
+        </mat-form-field>
+
+        <mat-checkbox formControlName="active">Active vendor</mat-checkbox>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="vendorForm.invalid || isSaving">
+            {{ isSaving ? 'Saving...' : 'Add vendor' }}
+          </button>
+        </div>
+
+        @if (formError) {
+          <div class="error-message">{{ formError }}</div>
+        }
+      </form>
+    </mat-card>
+
+    <section class="vendor-list">
+      <h3>{{ selectedBusiness.name }} vendors</h3>
+      @if (isLoading) {
+        <div class="state-message">Loading vendors...</div>
+      }
+      @if (errorMessage) {
+        <div class="error-message">{{ errorMessage }}</div>
+      }
+      @if (!isLoading && !errorMessage && vendors.length > 0) {
+        <mat-list>
+          @for (vendor of vendors; track vendor.id) {
+            <mat-list-item>
+              <div matListItemTitle>{{ vendor.name }}</div>
+              <div matListItemLine>
+                @if (vendor.contactName) {
+                  <span class="vendor-detail">Contact: {{ vendor.contactName }}</span>
+                }
+                @if (vendor.email) {
+                  <span class="vendor-detail">Email: {{ vendor.email }}</span>
+                }
+                @if (vendor.phone) {
+                  <span class="vendor-detail">Phone: {{ vendor.phone }}</span>
+                }
+              </div>
+              @if (!vendor.active) {
+                <div matListItemLine class="inactive-chip">Inactive</div>
+              }
+            </mat-list-item>
+          }
+        </mat-list>
+      }
+      @if (!isLoading && !errorMessage && vendors.length === 0) {
+        <div class="state-message">
+          No vendors have been added for this business yet.
+        </div>
+      }
+    </section>
+  } @else {
+    <div class="no-business">
+      <p>Select or create a business before managing vendors.</p>
+    </div>
+  }
+</div>
