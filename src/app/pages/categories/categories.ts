@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { CommonModule, NgForOf, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -38,9 +38,7 @@ interface CategoryOption {
     MatLabel,
     MatButton,
     MatListModule,
-    MatSelectModule,
-    NgIf,
-    NgForOf
+    MatSelectModule
   ]
 })
 export class Categories implements OnInit, OnDestroy {

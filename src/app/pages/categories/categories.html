@@ -1,7 +1,7 @@
 <div class="categories-page">
   <h2 class="page-title">Categories</h2>
 
-  <ng-container *ngIf="selectedBusiness; else noBusiness">
+  @if (selectedBusiness) {
     <mat-card class="category-form-card">
       <h3>Add category</h3>
       <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
@@ -19,9 +19,11 @@
           <mat-label>Parent category (optional)</mat-label>
           <mat-select formControlName="parentCategoryId">
             <mat-option [value]="null">No parent</mat-option>
-            <mat-option *ngFor="let option of parentCategoryOptions" [value]="option.id">
-              {{ option.label }}
-            </mat-option>
+            @for (option of parentCategoryOptions; track option.id) {
+              <mat-option [value]="option.id">
+                {{ option.label }}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
@@ -31,46 +33,58 @@
           </button>
         </div>
 
-        <div *ngIf="formError" class="error-message">{{ formError }}</div>
+        @if (formError) {
+          <div class="error-message">{{ formError }}</div>
+        }
       </form>
     </mat-card>
 
     <section class="category-list">
-      <h3>{{ selectedBusiness?.name }} categories</h3>
-      <div *ngIf="isLoading" class="state-message">Loading categories...</div>
-      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-      <mat-list *ngIf="!isLoading && !errorMessage && categoryTree.length > 0" class="category-tree">
-        <ng-container *ngFor="let category of categoryTree">
-          <ng-container
-            *ngTemplateOutlet="categoryNode; context: { $implicit: category, level: 0 }"
-          ></ng-container>
-        </ng-container>
-      </mat-list>
-      <div *ngIf="!isLoading && !errorMessage && flatCategories.length === 0" class="state-message">
-        No categories have been created for this business yet.
-      </div>
+      <h3>{{ selectedBusiness.name }} categories</h3>
+      @if (isLoading) {
+        <div class="state-message">Loading categories...</div>
+      }
+      @if (errorMessage) {
+        <div class="error-message">{{ errorMessage }}</div>
+      }
+      @if (!isLoading && !errorMessage && categoryTree.length > 0) {
+        <mat-list class="category-tree">
+          @for (category of categoryTree; track category.id) {
+            <ng-container
+              *ngTemplateOutlet="categoryNode; context: { $implicit: category, level: 0 }"
+            ></ng-container>
+          }
+        </mat-list>
+      }
+      @if (!isLoading && !errorMessage && flatCategories.length === 0) {
+        <div class="state-message">
+          No categories have been created for this business yet.
+        </div>
+      }
     </section>
-  </ng-container>
+  } @else {
+    <div class="no-business">
+      <p>Select or create a business before managing categories.</p>
+    </div>
+  }
 </div>
-
-<ng-template #noBusiness>
-  <div class="no-business">
-    <p>Select or create a business before managing categories.</p>
-  </div>
-</ng-template>
 
 <ng-template #categoryNode let-node let-level="level">
   <mat-list-item [ngClass]="{ 'subcategory-item': level > 0 }">
     <div matListItemTitle>{{ node.name }}</div>
-    <div matListItemLine *ngIf="node.description">{{ node.description }}</div>
+    @if (node.description) {
+      <div matListItemLine>{{ node.description }}</div>
+    }
   </mat-list-item>
-  <div class="subcategory-list" *ngIf="node.subcategories.length > 0">
-    <mat-list>
-      <ng-container *ngFor="let child of node.subcategories">
-        <ng-container
-          *ngTemplateOutlet="categoryNode; context: { $implicit: child, level: level + 1 }"
-        ></ng-container>
-      </ng-container>
-    </mat-list>
-  </div>
+  @if (node.subcategories.length > 0) {
+    <div class="subcategory-list">
+      <mat-list>
+        @for (child of node.subcategories; track child.id) {
+          <ng-container
+            *ngTemplateOutlet="categoryNode; context: { $implicit: child, level: level + 1 }"
+          ></ng-container>
+        }
+      </mat-list>
+    </div>
+  }
 </ng-template>

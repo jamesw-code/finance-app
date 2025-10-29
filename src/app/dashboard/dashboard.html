@@ -7,22 +7,34 @@
     <mat-form-field appearance="fill" class="business-select">
       <mat-label>Select Business</mat-label>
       <mat-select [(ngModel)]="selectedBusinessId" (selectionChange)="onSelectBusiness($event.value)">
-        <mat-option *ngFor="let biz of businesses" [value]="biz.id">
-          {{ biz.name }}
-        </mat-option>
+        @for (biz of businesses; track biz.id) {
+          <mat-option [value]="biz.id">
+            {{ biz.name }}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>
 
-  <p *ngIf="isLoading" class="status-message">Loading businesses…</p>
-  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  @if (isLoading) {
+    <p class="status-message">Loading businesses…</p>
+  }
+  @if (errorMessage) {
+    <p class="error-message">{{ errorMessage }}</p>
+  }
 
-  <div *ngIf="!isLoading && !errorMessage && businesses.length === 0" class="status-message">
-    No businesses yet. Create one to get started.
-  </div>
+  @if (!isLoading && !errorMessage && businesses.length === 0) {
+    <div class="status-message">
+      No businesses yet. Create one to get started.
+    </div>
+  }
 
-  <div *ngIf="selectedBusiness">
-    <h2>Welcome to {{ selectedBusiness.name }}</h2>
-    <p *ngIf="selectedBusiness.taxId">Tax ID: {{ selectedBusiness.taxId }}</p>
-  </div>
+  @if (selectedBusiness) {
+    <div>
+      <h2>Welcome to {{ selectedBusiness.name }}</h2>
+      @if (selectedBusiness.taxId) {
+        <p>Tax ID: {{ selectedBusiness.taxId }}</p>
+      }
+    </div>
+  }
 </div>

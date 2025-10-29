@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { CommonModule, NgForOf, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatLabel } from '@angular/material/input';
@@ -27,9 +27,7 @@ import { BusinessService } from '../../services/business.service';
     MatLabel,
     MatButton,
     MatListModule,
-    RouterModule,
-    NgIf,
-    NgForOf
+    RouterModule
   ]
 })
 export class Accounts implements OnInit, OnDestroy {

@@ -8,7 +8,9 @@
     <mat-label>Tax ID</mat-label>
     <input matInput [(ngModel)]="business.taxId" />
   </mat-form-field>
-  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  @if (errorMessage) {
+    <p class="error-message">{{ errorMessage }}</p>
+  }
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onCancel()" [disabled]="isSaving">Cancel</button>

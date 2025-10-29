@@ -7,7 +7,7 @@ import { MatOption } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
 import { CreateBusinessDialog } from '../create-business-dialog/create-business-dialog';
 import { MatButton } from '@angular/material/button';
-import { NgForOf, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { BusinessService } from '../services/business.service';
 import { finalize } from 'rxjs/operators';
 
@@ -21,8 +21,7 @@ import { finalize } from 'rxjs/operators';
     FormsModule,
     MatButton,
     MatLabel,
-    NgForOf,
-    NgIf
+    CommonModule
   ],
   templateUrl: './dashboard.html',
   standalone: true,

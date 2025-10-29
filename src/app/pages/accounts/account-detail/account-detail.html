@@ -4,11 +4,11 @@
     <h2>Account details</h2>
   </div>
 
-  <ng-container *ngIf="selectedBusiness; else noBusiness">
-    <ng-container *ngIf="account; else accountState">
+  @if (selectedBusiness) {
+    @if (account) {
       <mat-card class="account-summary">
         <h3 class="account-name">{{ account.name }}</h3>
-        <p class="account-business">Business: {{ selectedBusiness?.name }}</p>
+        <p class="account-business">Business: {{ selectedBusiness.name }}</p>
         <dl class="account-metadata">
           <div>
             <dt>Account ID</dt>
@@ -25,15 +25,15 @@
         <h3>Transactions</h3>
         <p class="state-message">Transactions will appear here in a future update.</p>
       </section>
-    </ng-container>
-  </ng-container>
+    } @else {
+      @if (isLoading) {
+        <div class="state-message">Loading account details...</div>
+      }
+      @if (errorMessage) {
+        <div class="error-message">{{ errorMessage }}</div>
+      }
+    }
+  } @else {
+    <div class="state-message">Select a business before viewing account details.</div>
+  }
 </div>
-
-<ng-template #accountState>
-  <div *ngIf="isLoading" class="state-message">Loading account details...</div>
-  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-</ng-template>
-
-<ng-template #noBusiness>
-  <div class="state-message">Select a business before viewing account details.</div>
-</ng-template>

@@ -4,7 +4,7 @@ import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { BusinessService } from '../services/business.service';
 import { finalize } from 'rxjs/operators';
 
@@ -19,7 +19,7 @@ import { finalize } from 'rxjs/operators';
     MatInput,
     MatDialogActions,
     MatButton,
-    NgIf,
+    CommonModule
   ],
   templateUrl: './create-business-dialog.html',
   standalone: true,
