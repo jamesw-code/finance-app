@@ -1,84 +1,124 @@
 <div class="vendors-page">
-  <h2 class="page-title">Vendors</h2>
+  <div class="page-header">
+    <div class="page-heading">
+      <h1>Vendors</h1>
+      <p class="page-subtitle">Manage the companies and people you pay for this business.</p>
+    </div>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="focusVendorForm()"
+      [disabled]="!selectedBusiness"
+    >
+      Add vendor
+    </button>
+  </div>
 
-  @if (selectedBusiness) {
-    <mat-card class="vendor-form-card">
-      <h3>Add vendor</h3>
-      <form [formGroup]="vendorForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline">
-          <mat-label>Vendor name</mat-label>
-          <input matInput formControlName="name" placeholder="Acme Supplies" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Contact name (optional)</mat-label>
-          <input matInput formControlName="contactName" placeholder="Jane Doe" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Email (optional)</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="vendor@example.com" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Phone (optional)</mat-label>
-          <input matInput formControlName="phone" placeholder="(555) 123-4567" />
-        </mat-form-field>
-
-        <mat-checkbox formControlName="active">Active vendor</mat-checkbox>
-
-        <div class="actions">
-          <button mat-raised-button color="primary" type="submit" [disabled]="vendorForm.invalid || isSaving">
-            {{ isSaving ? 'Saving...' : 'Add vendor' }}
-          </button>
-        </div>
-
-        @if (formError) {
-          <div class="error-message">{{ formError }}</div>
-        }
-      </form>
-    </mat-card>
-
-    <section class="vendor-list">
-      <h3>{{ selectedBusiness.name }} vendors</h3>
-      @if (isLoading) {
-        <div class="state-message">Loading vendors...</div>
-      }
-      @if (errorMessage) {
-        <div class="error-message">{{ errorMessage }}</div>
-      }
-      @if (!isLoading && !errorMessage && vendors.length > 0) {
-        <mat-list>
-          @for (vendor of vendors; track vendor.id) {
-            <mat-list-item>
-              <div matListItemTitle>{{ vendor.name }}</div>
-              <div matListItemLine>
-                @if (vendor.contactName) {
-                  <span class="vendor-detail">Contact: {{ vendor.contactName }}</span>
-                }
-                @if (vendor.email) {
-                  <span class="vendor-detail">Email: {{ vendor.email }}</span>
-                }
-                @if (vendor.phone) {
-                  <span class="vendor-detail">Phone: {{ vendor.phone }}</span>
-                }
-              </div>
-              @if (!vendor.active) {
-                <div matListItemLine class="inactive-chip">Inactive</div>
-              }
-            </mat-list-item>
-          }
-        </mat-list>
-      }
-      @if (!isLoading && !errorMessage && vendors.length === 0) {
-        <div class="state-message">
-          No vendors have been added for this business yet.
-        </div>
-      }
+  @if (!selectedBusiness) {
+    <section class="state-card">
+      <h2>Select a business</h2>
+      <p>Choose a business to start managing its vendors.</p>
     </section>
   } @else {
-    <div class="no-business">
-      <p>Select or create a business before managing vendors.</p>
+    <div class="content-grid">
+      <mat-card class="vendor-form-card">
+        <div class="form-heading">
+          <h2>Add vendor</h2>
+          <p>Keep your payees organized by creating vendor records for this business.</p>
+        </div>
+        <form [formGroup]="vendorForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline">
+            <mat-label>Vendor name</mat-label>
+            <input
+              matInput
+              #vendorNameInput
+              formControlName="name"
+              placeholder="Acme Supplies"
+              autocomplete="off"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Contact name (optional)</mat-label>
+            <input matInput formControlName="contactName" placeholder="Jane Doe" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email (optional)</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="vendor@example.com" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phone (optional)</mat-label>
+            <input matInput formControlName="phone" placeholder="(555) 123-4567" />
+          </mat-form-field>
+
+          <mat-checkbox formControlName="active">Active vendor</mat-checkbox>
+
+          <div class="actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="vendorForm.invalid || isSaving">
+              {{ isSaving ? 'Saving...' : 'Add vendor' }}
+            </button>
+          </div>
+
+          @if (formError) {
+            <div class="error-message">{{ formError }}</div>
+          }
+        </form>
+      </mat-card>
+
+      <section class="vendor-list">
+        <div class="list-heading">
+          <h2>{{ selectedBusiness.name }} vendors</h2>
+          <p class="page-subtitle">View contact information for every vendor associated with this business.</p>
+        </div>
+
+        @if (isLoading) {
+          <div class="state-message">Loading vendors...</div>
+        } @else if (errorMessage) {
+          <div class="error-message">{{ errorMessage }}</div>
+        } @else if (!vendors.length) {
+          <section class="state-card">
+            <h2>No vendors yet</h2>
+            <p>Create your first vendor to keep track of who you pay.</p>
+          </section>
+        } @else {
+          <div class="vendor-table-wrapper">
+            <table class="vendor-table">
+              <thead>
+                <tr>
+                  <th scope="col">Vendor</th>
+                  <th scope="col">Contact</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col" class="status-column">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (vendor of vendors; track vendor.id) {
+                  <tr>
+                    <td data-title="Vendor">
+                      <div class="primary">{{ vendor.name }}</div>
+                      @if (vendor.contactName) {
+                        <div class="secondary">Contact: {{ vendor.contactName }}</div>
+                      }
+                    </td>
+                    <td data-title="Contact">{{ vendor.contactName || '—' }}</td>
+                    <td data-title="Email">{{ vendor.email || '—' }}</td>
+                    <td data-title="Phone">{{ vendor.phone || '—' }}</td>
+                    <td data-title="Status" class="status-column">
+                      <span class="status-chip" [class.inactive]="!vendor.active">
+                        {{ vendor.active ? 'Active' : 'Inactive' }}
+                      </span>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
     </div>
   }
 </div>

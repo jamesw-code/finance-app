@@ -1,11 +1,18 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  inject
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
-import { MatListModule } from '@angular/material/list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { finalize, Subscription } from 'rxjs';
 import { Vendor } from '../../model/vendor.model';
@@ -26,7 +33,6 @@ import { BusinessService } from '../../services/business.service';
     MatInput,
     MatLabel,
     MatButton,
-    MatListModule,
     MatCheckboxModule
   ]
 })
@@ -39,6 +45,9 @@ export class Vendors implements OnInit, OnDestroy {
   isSaving = false;
   errorMessage: string | null = null;
   formError: string | null = null;
+
+  @ViewChild('vendorNameInput')
+  private readonly vendorNameInput?: ElementRef<HTMLInputElement>;
 
   readonly vendorForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
@@ -71,6 +80,15 @@ export class Vendors implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  focusVendorForm(): void {
+    if (!this.selectedBusiness) {
+      return;
+    }
+
+    const nativeElement = this.vendorNameInput?.nativeElement;
+    nativeElement?.focus();
   }
 
   onSubmit(): void {
