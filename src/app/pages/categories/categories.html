@@ -1,55 +1,19 @@
 <div class="categories-page">
-  <h2 class="page-title">Categories</h2>
+  <div class="page-header">
+    <h2 class="page-title">Categories</h2>
+    <button
+      mat-raised-button
+      color="primary"
+      class="add-category-button"
+      type="button"
+      (click)="openAddCategoryDialog()"
+      [disabled]="!selectedBusiness"
+    >
+      Add category
+    </button>
+  </div>
 
   @if (selectedBusiness) {
-    <mat-card class="category-form-card">
-      <h3>Add category</h3>
-      <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline">
-          <mat-label>Category name</mat-label>
-          <input matInput formControlName="name" placeholder="Utilities" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Description (optional)</mat-label>
-          <input matInput formControlName="description" placeholder="Monthly electric bill" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Category kind</mat-label>
-          <mat-select formControlName="kind" placeholder="Select a kind">
-            @for (option of categoryKindOptions; track option.value) {
-              <mat-option [value]="option.value">{{ option.label }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Parent category (optional)</mat-label>
-          <mat-select formControlName="parentCategoryId">
-            <mat-option [value]="null">No parent</mat-option>
-            @for (option of parentCategoryOptions; track option.id) {
-              <mat-option [value]="option.id">
-                {{ option.label }}
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-
-        <mat-checkbox formControlName="active">Active</mat-checkbox>
-
-        <div class="actions">
-          <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || isSaving">
-            {{ isSaving ? 'Saving...' : 'Add category' }}
-          </button>
-        </div>
-
-        @if (formError) {
-          <div class="error-message">{{ formError }}</div>
-        }
-      </form>
-    </mat-card>
-
     <section class="category-list">
       <h3>{{ selectedBusiness.name }} categories</h3>
       @if (isLoading) {
@@ -79,6 +43,60 @@
     </div>
   }
 </div>
+
+<ng-template #addCategoryDialog>
+  <form class="add-category-form" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+    <h2 mat-dialog-title>Add category</h2>
+    <mat-dialog-content>
+      <p class="dialog-description">
+        Create a new category for {{ selectedBusiness?.name ?? 'this business' }}.
+      </p>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Category name</mat-label>
+        <input matInput formControlName="name" placeholder="Utilities" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description (optional)</mat-label>
+        <input matInput formControlName="description" placeholder="Monthly electric bill" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Category kind</mat-label>
+        <mat-select formControlName="kind" placeholder="Select a kind">
+          @for (option of categoryKindOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Parent category (optional)</mat-label>
+        <mat-select formControlName="parentCategoryId">
+          <mat-option [value]="null">No parent</mat-option>
+          @for (option of parentCategoryOptions; track option.id) {
+            <mat-option [value]="option.id">
+              {{ option.label }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-checkbox formControlName="active">Active</mat-checkbox>
+
+      @if (formError) {
+        <div class="error-message">{{ formError }}</div>
+      }
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button type="button" (click)="closeAddCategoryDialog()" [disabled]="isSaving">Cancel</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || isSaving">
+        {{ isSaving ? 'Saving...' : 'Add category' }}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</ng-template>
 
 <ng-template #categoryNode let-node let-level="level">
   <mat-list-item [ngClass]="{ 'subcategory-item': level > 0 }">

@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
@@ -13,6 +12,7 @@ import { Category, CategoryKind } from '../../model/category.model';
 import { Business } from '../../model/business.model';
 import { CategoryService } from '../../services/category.service';
 import { BusinessService } from '../../services/business.service';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 interface CategoryNode extends Category {
   subcategories: CategoryNode[];
@@ -33,14 +33,14 @@ interface CategoryOption {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatCardModule,
     MatFormField,
     MatInput,
     MatLabel,
     MatButton,
     MatListModule,
     MatSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatDialogModule
   ]
 })
 export class Categories implements OnInit, OnDestroy {
@@ -71,11 +71,16 @@ export class Categories implements OnInit, OnDestroy {
   });
 
   private readonly subscriptions = new Subscription();
+  private dialogRef: MatDialogRef<unknown> | null = null;
+
+  @ViewChild('addCategoryDialog')
+  private addCategoryDialog?: TemplateRef<unknown>;
 
   constructor(
     private readonly categoryService: CategoryService,
     private readonly businessService: BusinessService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -85,6 +90,9 @@ export class Categories implements OnInit, OnDestroy {
       this.categoryTree = [];
       this.parentCategoryOptions = [];
       this.errorMessage = null;
+      if (!business) {
+        this.closeAddCategoryDialog();
+      }
       if (business?.id != null) {
         this.loadCategories(business.id);
       }
@@ -95,6 +103,46 @@ export class Categories implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  openAddCategoryDialog(): void {
+    if (!this.selectedBusiness || !this.addCategoryDialog) {
+      return;
+    }
+
+    this.formError = null;
+    this.categoryForm.reset({
+      name: '',
+      description: '',
+      parentCategoryId: null,
+      kind: null,
+      active: true
+    });
+    this.categoryForm.markAsPristine();
+    this.categoryForm.markAsUntouched();
+
+    const dialogRef = this.dialog.open(this.addCategoryDialog, {
+      width: '520px'
+    });
+    this.dialogRef = dialogRef;
+
+    const dialogSub = dialogRef.afterClosed().subscribe(() => {
+      this.dialogRef = null;
+      this.formError = null;
+      this.categoryForm.reset({
+        name: '',
+        description: '',
+        parentCategoryId: null,
+        kind: null,
+        active: true
+      });
+    });
+    this.subscriptions.add(dialogSub);
+  }
+
+  closeAddCategoryDialog(): void {
+    this.dialogRef?.close();
+    this.dialogRef = null;
   }
 
   private loadCategories(businessId: number): void {
@@ -188,6 +236,7 @@ export class Categories implements OnInit, OnDestroy {
             active: true
           });
           this.updateCategoryStructures([...this.flatCategories, createdCategory]);
+          this.closeAddCategoryDialog();
         },
         error: (error) => {
           console.error('Failed to create category', error);
