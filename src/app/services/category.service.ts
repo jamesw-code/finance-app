@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Category } from '../model/category.model';
+import { Category, CategoryKind } from '../model/category.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,13 @@ export class CategoryService {
 
   createCategory(
     businessId: number,
-    category: { name: string; description?: string; parentCategoryId?: number | null }
+    category: {
+      name: string;
+      description?: string;
+      parentCategoryId?: number | null;
+      kind: CategoryKind;
+      active: boolean;
+    }
   ): Observable<Category> {
     return this.http.post<Category>(`${this.baseUrl}/${businessId}/categories`, category);
   }

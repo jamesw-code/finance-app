@@ -3,6 +3,7 @@ package com.jwctech.finance.services;
 import com.jwctech.finance.dto.CategoryDto;
 import com.jwctech.finance.entities.Business;
 import com.jwctech.finance.entities.Category;
+import com.jwctech.finance.entities.CategoryKind;
 import com.jwctech.finance.repositories.BusinessRepository;
 import com.jwctech.finance.repositories.CategoryRepository;
 import org.springframework.http.HttpStatus;
@@ -33,11 +34,19 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public CategoryDto createCategory(Long businessId, String name, String description, Long parentCategoryId) {
+    public CategoryDto createCategory(Long businessId,
+                                      String name,
+                                      String description,
+                                      Long parentCategoryId,
+                                      CategoryKind kind,
+                                      Boolean active) {
         Business business = businessRepository.findById(businessId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Business not found."));
 
         String trimmedName = name.trim();
+        if (kind == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category kind is required.");
+        }
         if (categoryRepository.existsByNameIgnoreCaseAndBusiness_Id(trimmedName, businessId)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "A category with that name already exists for this business.");
@@ -59,6 +68,8 @@ public class CategoryService {
         }
         category.setBusiness(business);
         category.setParentCategory(parentCategory);
+        category.setKind(kind.name());
+        category.setActive(active != null ? active : true);
 
         Category savedCategory = categoryRepository.save(category);
         return toDto(savedCategory);
@@ -76,7 +87,9 @@ public class CategoryService {
                 category.getName(),
                 category.getDescription(),
                 businessId,
-                parentCategoryId
+                parentCategoryId,
+                category.getKind() != null ? CategoryKind.fromString(category.getKind()) : CategoryKind.OTHER,
+                category.isActive()
         );
     }
 }

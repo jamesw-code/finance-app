@@ -16,6 +16,15 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+          <mat-label>Category kind</mat-label>
+          <mat-select formControlName="kind" placeholder="Select a kind">
+            @for (option of categoryKindOptions; track option.value) {
+              <mat-option [value]="option.value">{{ option.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
           <mat-label>Parent category (optional)</mat-label>
           <mat-select formControlName="parentCategoryId">
             <mat-option [value]="null">No parent</mat-option>
@@ -26,6 +35,8 @@
             }
           </mat-select>
         </mat-form-field>
+
+        <mat-checkbox formControlName="active">Active</mat-checkbox>
 
         <div class="actions">
           <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || isSaving">
@@ -74,6 +85,10 @@
     <div matListItemTitle>{{ node.name }}</div>
     @if (node.description) {
       <div matListItemLine>{{ node.description }}</div>
+    }
+    <div matListItemLine>Kind: {{ getKindLabel(node.kind) }}</div>
+    @if (!node.active) {
+      <div matListItemLine class="inactive-label">Inactive</div>
     }
   </mat-list-item>
   @if (node.subcategories.length > 0) {

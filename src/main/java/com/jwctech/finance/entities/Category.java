@@ -26,6 +26,9 @@ public class Category {
     @Column
     private String description;
 
+    @Column(name = "kind", nullable = false, length = 32)
+    private String kind = CategoryKind.OTHER.name();
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "business_id", nullable = false)
     private Business business;
@@ -33,6 +36,9 @@ public class Category {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_category_id")
     private Category parentCategory;
+
+    @Column(nullable = false)
+    private boolean active = true;
 
     public Category() {
     }
