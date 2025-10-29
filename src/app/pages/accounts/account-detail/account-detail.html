@@ -7,8 +7,20 @@
   @if (selectedBusiness) {
     @if (account) {
       <mat-card class="account-summary">
-        <h3 class="account-name">{{ account.name }}</h3>
-        <p class="account-business">Business: {{ selectedBusiness.name }}</p>
+        <div class="summary-header">
+          <div>
+            <h3 class="account-name">{{ account.name }}</h3>
+            <p class="account-business">Business: {{ selectedBusiness.name }}</p>
+          </div>
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="openAddTransactionDialog()"
+            [disabled]="transactionsLoading"
+          >
+            Add transaction
+          </button>
+        </div>
         <dl class="account-metadata">
           <div>
             <dt>Account ID</dt>
@@ -21,9 +33,56 @@
         </dl>
       </mat-card>
 
-      <section class="transactions-placeholder">
-        <h3>Transactions</h3>
-        <p class="state-message">Transactions will appear here in a future update.</p>
+      <section class="transactions-section">
+        <div class="section-header">
+          <h3>Transactions</h3>
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="openAddTransactionDialog()"
+            [disabled]="transactionsLoading"
+          >
+            Add transaction
+          </button>
+        </div>
+
+        @if (transactionsLoading) {
+          <div class="state-message">Loading transactions...</div>
+        } @else if (transactionsError) {
+          <div class="error-message">{{ transactionsError }}</div>
+        } @else if (!transactions.length) {
+          <div class="state-message">No transactions recorded for this account yet.</div>
+        } @else {
+          <div class="transaction-table-wrapper">
+            <table class="transaction-table">
+              <thead>
+                <tr>
+                  <th scope="col">Posted</th>
+                  <th scope="col">Payee</th>
+                  <th scope="col">Memo</th>
+                  <th scope="col" class="amount-column">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (transaction of transactions; track trackByTransactionId($index, transaction)) {
+                  <tr>
+                    <td data-title="Posted">{{ transaction.postedAt | date: 'mediumDate' }}</td>
+                    <td data-title="Payee">
+                      <div class="primary">{{ transaction.payee }}</div>
+                      @if (transaction.vendorName) {
+                        <div class="secondary">Vendor: {{ transaction.vendorName }}</div>
+                      }
+                    </td>
+                    <td data-title="Memo">{{ transaction.memo || '—' }}</td>
+                    <td data-title="Amount" class="amount-column">
+                      {{ transaction.amount | currency: 'USD':'symbol':'1.2-2' }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
       </section>
     } @else {
       @if (isLoading) {

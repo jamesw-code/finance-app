@@ -1,0 +1,138 @@
+<h2 mat-dialog-title>Add transaction</h2>
+
+@if (loadError) {
+  <div mat-dialog-content class="dialog-message error">{{ loadError }}</div>
+} @else {
+  <form
+    id="transactionForm"
+    mat-dialog-content
+    [formGroup]="transactionForm"
+    class="transaction-form"
+    (ngSubmit)="onSubmit()"
+  >
+    @if (formError) {
+      <div class="form-error">{{ formError }}</div>
+    }
+
+    @if (isInitializing) {
+      <div class="state-message">Loading transaction details...</div>
+    }
+
+    <div class="form-grid">
+      @if (isAccountLocked) {
+        <div class="locked-account">
+          <div class="label">Account</div>
+          <div class="value">
+            {{ lockedAccountName || ('Account #' + lockedAccountId) }}
+          </div>
+        </div>
+      } @else {
+        <mat-form-field appearance="outline">
+          <mat-label>Account</mat-label>
+          <mat-select formControlName="accountId" required>
+            @for (account of accounts; track account.id) {
+              <mat-option [value]="account.id">{{ account.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+
+      <mat-form-field appearance="outline">
+        <mat-label>Posted date</mat-label>
+        <input matInput type="date" formControlName="postedAt" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Total amount</mat-label>
+        <input matInput type="number" step="0.01" formControlName="amount" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Payee</mat-label>
+        <input matInput formControlName="payee" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Vendor</mat-label>
+        <mat-select formControlName="vendorId">
+          <mat-option [value]="null">None</mat-option>
+          @for (vendor of vendors; track vendor.id) {
+            <mat-option [value]="vendor.id">{{ vendor.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="memo-field">
+        <mat-label>Memo</mat-label>
+        <textarea matInput formControlName="memo" rows="2"></textarea>
+      </mat-form-field>
+    </div>
+
+    <section class="splits-section" formArrayName="splits">
+      <div class="section-header">
+        <h3>Splits</h3>
+        <button
+          mat-stroked-button
+          type="button"
+          color="primary"
+          (click)="addSplit()"
+          [disabled]="isSaving || isInitializing"
+        >
+          Add split
+        </button>
+      </div>
+
+      @if (!categories.length) {
+        <p class="helper-text">Create categories to categorize your transaction splits.</p>
+      }
+
+      <div class="split-list">
+        @for (split of splits.controls; track trackBySplitIndex($index, split); let i = $index) {
+          <div class="split-row" [formGroupName]="i">
+            <mat-form-field appearance="outline" class="category-field">
+              <mat-label>Category</mat-label>
+              <mat-select formControlName="categoryId" required>
+                @for (category of categories; track category.id) {
+                  <mat-option [value]="category.id">{{ category.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="amount-field">
+              <mat-label>Amount</mat-label>
+              <input matInput type="number" step="0.01" formControlName="amount" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="memo-field">
+              <mat-label>Memo</mat-label>
+              <input matInput formControlName="memo" placeholder="Optional" />
+            </mat-form-field>
+
+            <button
+              mat-stroked-button
+              type="button"
+              color="warn"
+              (click)="removeSplit(i)"
+              [disabled]="splits.length === 1 || isSaving"
+            >
+              Remove
+            </button>
+          </div>
+        }
+      </div>
+    </section>
+  </form>
+}
+
+<div mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()" [disabled]="isSaving">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="submit"
+    form="transactionForm"
+    [disabled]="isSaving || !!loadError || isInitializing"
+  >
+    Save transaction
+  </button>
+</div>
