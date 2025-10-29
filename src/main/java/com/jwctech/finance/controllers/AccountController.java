@@ -30,6 +30,11 @@ public class AccountController {
         return accountService.getAccounts(businessId);
     }
 
+    @GetMapping("/{accountId}")
+    public AccountDto getAccount(@PathVariable Long businessId, @PathVariable Long accountId) {
+        return accountService.getAccount(businessId, accountId);
+    }
+
     @PostMapping
     public ResponseEntity<AccountDto> createAccount(@PathVariable Long businessId,
                                                     @Valid @RequestBody CreateAccountRequest request) {
