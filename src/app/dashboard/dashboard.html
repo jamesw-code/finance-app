@@ -1,40 +1,53 @@
-<div class="dashboard">
-  <div class="business-actions">
-    <button mat-raised-button color="primary" (click)="openCreateDialog()">
-      + Create New Business
-    </button>
+<div class="dashboard-page">
+  <div class="page-header">
+    <div class="page-heading">
+      <h1>Dashboard</h1>
+      <p class="page-subtitle">Select a business to get a quick summary and jump into key areas.</p>
+    </div>
+    <div class="header-actions">
+      <button mat-flat-button color="primary" (click)="openCreateDialog()">
+        + Create new business
+      </button>
 
-    <mat-form-field appearance="fill" class="business-select">
-      <mat-label>Select Business</mat-label>
-      <mat-select [(ngModel)]="selectedBusinessId" (selectionChange)="onSelectBusiness($event.value)">
-        @for (biz of businesses; track biz.id) {
-          <mat-option [value]="biz.id">
-            {{ biz.name }}
-          </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="business-select">
+        <mat-label>Select business</mat-label>
+        <mat-select [(ngModel)]="selectedBusinessId" (selectionChange)="onSelectBusiness($event.value)">
+          @for (biz of businesses; track biz.id) {
+            <mat-option [value]="biz.id">
+              {{ biz.name }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 
   @if (isLoading) {
-    <p class="status-message">Loading businesses…</p>
-  }
-  @if (errorMessage) {
-    <p class="error-message">{{ errorMessage }}</p>
-  }
-
-  @if (!isLoading && !errorMessage && businesses.length === 0) {
-    <div class="status-message">
-      No businesses yet. Create one to get started.
-    </div>
+    <div class="state-message">Loading businesses…</div>
+  } @else if (errorMessage) {
+    <div class="error-message">{{ errorMessage }}</div>
+  } @else if (!businesses.length) {
+    <section class="state-card">
+      <h2>No businesses yet</h2>
+      <p>Create your first business to start tracking finances.</p>
+    </section>
   }
 
   @if (selectedBusiness) {
-    <div>
+    <section class="summary-card">
       <h2>Welcome to {{ selectedBusiness.name }}</h2>
-      @if (selectedBusiness.taxId) {
-        <p>Tax ID: {{ selectedBusiness.taxId }}</p>
-      }
-    </div>
+      <p class="card-subtitle">Use the navigation to manage transactions, accounts, and categories.</p>
+
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="label">Business ID</span>
+          <span class="value">#{{ selectedBusiness.id }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Tax ID</span>
+          <span class="value">{{ selectedBusiness.taxId || 'Not provided' }}</span>
+        </div>
+      </div>
+    </section>
   }
 </div>

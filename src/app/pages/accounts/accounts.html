@@ -1,61 +1,77 @@
 <div class="accounts-page">
-  <h2 class="page-title">Accounts</h2>
+  <div class="page-header">
+    <div class="page-heading">
+      <h1>Accounts</h1>
+      <p class="page-subtitle">Create and organize the accounts used for this business.</p>
+    </div>
+  </div>
 
-  @if (selectedBusiness) {
-    <mat-card class="account-form-card">
-      <h3>Add account</h3>
-      <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline">
-          <mat-label>Account name</mat-label>
-          <input matInput formControlName="name" placeholder="Operating account" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Account type (optional)</mat-label>
-          <input matInput formControlName="accountType" placeholder="Checking" />
-        </mat-form-field>
-
-        <div class="actions">
-          <button mat-raised-button color="primary" type="submit" [disabled]="accountForm.invalid || isSaving">
-            {{ isSaving ? 'Saving...' : 'Add account' }}
-          </button>
-        </div>
-
-        @if (formError) {
-          <div class="error-message">{{ formError }}</div>
-        }
-      </form>
-    </mat-card>
-
-    <section class="account-list">
-      <h3>{{ selectedBusiness.name }} accounts</h3>
-      @if (isLoading) {
-        <div class="state-message">Loading accounts...</div>
-      }
-      @if (errorMessage) {
-        <div class="error-message">{{ errorMessage }}</div>
-      }
-      @if (!isLoading && !errorMessage && accounts.length > 0) {
-        <mat-list>
-          @for (account of accounts; track account.id) {
-            <a mat-list-item [routerLink]="['/accounts', account.id]">
-              <div matListItemTitle>{{ account.name }}</div>
-              @if (account.accountType) {
-                <div matListItemLine>Type: {{ account.accountType }}</div>
-              }
-            </a>
-          }
-        </mat-list>
-      }
-      @if (!isLoading && !errorMessage && accounts.length === 0) {
-        <div class="state-message">
-          No accounts have been created for this business yet.
-        </div>
-      }
+  @if (!selectedBusiness) {
+    <section class="state-card">
+      <h2>Select a business</h2>
+      <p>Choose a business to view and add accounts.</p>
     </section>
   } @else {
-    <div class="no-business">
-      <p>Select or create a business before managing accounts.</p>
+    <div class="accounts-content">
+      <mat-card class="account-form-card">
+        <div class="card-heading">
+          <h2>Add account</h2>
+          <p class="card-subtitle">Capture the account details to make it available for transactions.</p>
+        </div>
+
+        <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline">
+            <mat-label>Account name</mat-label>
+            <input matInput formControlName="name" placeholder="Operating account" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Account type (optional)</mat-label>
+            <input matInput formControlName="accountType" placeholder="Checking" />
+          </mat-form-field>
+
+          <div class="actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="accountForm.invalid || isSaving">
+              {{ isSaving ? 'Saving...' : 'Add account' }}
+            </button>
+          </div>
+
+          @if (formError) {
+            <div class="error-message">{{ formError }}</div>
+          }
+        </form>
+      </mat-card>
+
+      <section class="account-list-card">
+        <div class="card-heading">
+          <h2>{{ selectedBusiness.name }} accounts</h2>
+          <p class="card-subtitle">Review the accounts currently set up for this business.</p>
+        </div>
+
+        @if (isLoading) {
+          <div class="state-message">Loading accounts...</div>
+        } @else if (errorMessage) {
+          <div class="error-message">{{ errorMessage }}</div>
+        } @else if (!accounts.length) {
+          <div class="state-card">
+            <h3>No accounts yet</h3>
+            <p>Create your first account to start tracking balances.</p>
+          </div>
+        } @else {
+          <div class="account-list-wrapper">
+            <mat-list>
+              @for (account of accounts; track account.id) {
+                <a mat-list-item [routerLink]="['/accounts', account.id]">
+                  <div matListItemTitle>{{ account.name }}</div>
+                  @if (account.accountType) {
+                    <div matListItemLine>Type: {{ account.accountType }}</div>
+                  }
+                </a>
+              }
+            </mat-list>
+          </div>
+        }
+      </section>
     </div>
   }
 </div>

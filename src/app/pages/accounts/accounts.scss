@@ -1,44 +1,56 @@
 .accounts-page {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 24px;
+  padding: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.page-title {
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.page-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-heading h1 {
   margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
-.account-form-card {
+.page-subtitle {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.state-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 32px;
+  background: rgba(0, 0, 0, 0.02);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1.5rem;
+  gap: 8px;
 }
 
-.account-form-card form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.state-card h2,
+.state-card h3 {
+  margin: 0;
+  font-size: 1.5rem;
 }
 
-.account-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.account-list a.mat-mdc-list-item {
-  border-radius: 0.5rem;
-  transition: background-color 0.2s ease;
-}
-
-.account-list a.mat-mdc-list-item:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
+.state-card p {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.65);
 }
 
 .state-message {
@@ -47,10 +59,93 @@
 
 .error-message {
   color: #b00020;
+  font-weight: 600;
 }
 
-.no-business {
-  margin-top: 1.5rem;
-  text-align: center;
+.accounts-content {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.account-form-card,
+.account-list-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background: #fff;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-heading h2,
+.card-heading h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.card-subtitle {
+  margin: 0;
   color: rgba(0, 0, 0, 0.6);
+}
+
+.account-form-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.account-list-wrapper {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.account-list-wrapper mat-list {
+  padding: 0;
+}
+
+.account-list-wrapper a.mat-mdc-list-item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  transition: background-color 0.2s ease;
+  padding-block: 12px;
+}
+
+.account-list-wrapper a.mat-mdc-list-item:last-of-type {
+  border-bottom: none;
+}
+
+.account-list-wrapper a.mat-mdc-list-item:hover,
+.account-list-wrapper a.mat-mdc-list-item:focus {
+  background-color: rgba(25, 118, 210, 0.08);
+}
+
+.account-list-wrapper .mat-mdc-list-item-title {
+  font-weight: 600;
+}
+
+@media (max-width: 960px) {
+  .accounts-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .accounts-page {
+    padding: 24px;
+  }
 }

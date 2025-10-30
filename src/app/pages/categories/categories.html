@@ -1,8 +1,11 @@
 <div class="categories-page">
   <div class="page-header">
-    <h2 class="page-title">Categories</h2>
+    <div class="page-heading">
+      <h1>Categories</h1>
+      <p class="page-subtitle">Organize transactions into meaningful groups for better reporting.</p>
+    </div>
     <button
-      mat-raised-button
+      mat-flat-button
       color="primary"
       class="add-category-button"
       type="button"
@@ -13,34 +16,39 @@
     </button>
   </div>
 
-  @if (selectedBusiness) {
-    <section class="category-list">
-      <h3>{{ selectedBusiness.name }} categories</h3>
+  @if (!selectedBusiness) {
+    <section class="state-card">
+      <h2>Select a business</h2>
+      <p>Choose a business to review and manage categories.</p>
+    </section>
+  } @else {
+    <section class="category-card">
+      <div class="card-heading">
+        <h2>{{ selectedBusiness.name }} categories</h2>
+        <p class="card-subtitle">View the hierarchy of categories configured for this business.</p>
+      </div>
+
       @if (isLoading) {
         <div class="state-message">Loading categories...</div>
-      }
-      @if (errorMessage) {
+      } @else if (errorMessage) {
         <div class="error-message">{{ errorMessage }}</div>
-      }
-      @if (!isLoading && !errorMessage && categoryTree.length > 0) {
-        <mat-list class="category-tree">
-          @for (category of categoryTree; track category.id) {
-            <ng-container
-              *ngTemplateOutlet="categoryNode; context: { $implicit: category, level: 0 }"
-            ></ng-container>
-          }
-        </mat-list>
-      }
-      @if (!isLoading && !errorMessage && flatCategories.length === 0) {
-        <div class="state-message">
-          No categories have been created for this business yet.
+      } @else if (!flatCategories.length) {
+        <div class="state-card">
+          <h3>No categories yet</h3>
+          <p>Create categories to categorize income and expenses.</p>
+        </div>
+      } @else {
+        <div class="category-list-wrapper">
+          <mat-list class="category-tree">
+            @for (category of categoryTree; track category.id) {
+              <ng-container
+                *ngTemplateOutlet="categoryNode; context: { $implicit: category, level: 0 }"
+              ></ng-container>
+            }
+          </mat-list>
         </div>
       }
     </section>
-  } @else {
-    <div class="no-business">
-      <p>Select or create a business before managing categories.</p>
-    </div>
   }
 </div>
 
@@ -91,7 +99,7 @@
     </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-button type="button" (click)="closeAddCategoryDialog()" [disabled]="isSaving">Cancel</button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || isSaving">
+      <button mat-flat-button color="primary" type="submit" [disabled]="categoryForm.invalid || isSaving">
         {{ isSaving ? 'Saving...' : 'Add category' }}
       </button>
     </mat-dialog-actions>
