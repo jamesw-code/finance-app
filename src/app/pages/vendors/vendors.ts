@@ -1,12 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  inject
-} from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -46,8 +38,8 @@ export class Vendors implements OnInit, OnDestroy {
   errorMessage: string | null = null;
   formError: string | null = null;
 
-  @ViewChild('vendorNameInput')
-  private readonly vendorNameInput?: ElementRef<HTMLInputElement>;
+  @ViewChild('vendorNameInput', { read: MatInput })
+  private readonly vendorNameInput?: MatInput;
 
   readonly vendorForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
@@ -87,8 +79,7 @@ export class Vendors implements OnInit, OnDestroy {
       return;
     }
 
-    const nativeElement = this.vendorNameInput?.nativeElement;
-    nativeElement?.focus();
+    this.vendorNameInput?.focus();
   }
 
   onSubmit(): void {
