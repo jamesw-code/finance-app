@@ -1,11 +1,151 @@
 <section class="reports">
   <header class="reports__header">
     <h1>Reports</h1>
-    <p class="reports__subtitle">Detailed financial reporting is on the way. Check back soon!</p>
+    <p class="reports__subtitle">
+      Explore performance insights to understand how your business is performing.
+    </p>
   </header>
 
-  <div class="reports__placeholder">
-    <mat-icon>bar_chart</mat-icon>
-    <p>We're building insightful reports to help visualize your business performance.</p>
-  </div>
+  <ng-container *ngIf="selectedBusiness; else reportsNoBusiness">
+    <section class="reports__context">
+      <mat-icon aria-hidden="true">business</mat-icon>
+      <div class="reports__context-copy">
+        <h2>{{ selectedBusiness.name }}</h2>
+        <p *ngIf="incomeStatement?.periodLabel; else defaultPeriod">
+          Income statement for {{ incomeStatement?.periodLabel }}
+        </p>
+        <ng-template #defaultPeriod>
+          <p>Income statement based on your recorded transactions.</p>
+        </ng-template>
+      </div>
+    </section>
+
+    <div *ngIf="errorMessage" class="reports__error" role="alert">
+      <mat-icon aria-hidden="true">error</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <div *ngIf="isLoading" class="reports__loading" aria-live="polite">
+      <mat-progress-spinner mode="indeterminate" diameter="48"></mat-progress-spinner>
+      <p>Loading income statement…</p>
+    </div>
+
+    <ng-container *ngIf="!isLoading && !errorMessage">
+      <ng-container *ngIf="incomeStatement; else reportsNoData">
+        <section class="reports__summary" aria-labelledby="income-summary-heading">
+          <div class="reports__summary-header">
+            <h2 id="income-summary-heading">Income Statement Overview</h2>
+            <p>
+              Track revenue, expenses, and profitability at a glance.
+            </p>
+          </div>
+          <div class="reports__summary-grid">
+            <article class="reports__summary-card">
+              <h3>Total Income</h3>
+              <p class="reports__summary-value">{{ incomeStatement.totalIncome | currency }}</p>
+              <p class="reports__summary-caption">Revenue recognised across income categories.</p>
+            </article>
+            <article class="reports__summary-card">
+              <h3>Total Expenses</h3>
+              <p class="reports__summary-value reports__summary-value--expense">
+                {{ incomeStatement.totalExpenses | currency }}
+              </p>
+              <p class="reports__summary-caption">Operational and other outgoing costs.</p>
+            </article>
+            <article class="reports__summary-card">
+              <h3>Net Income</h3>
+              <p
+                class="reports__summary-value"
+                [class.reports__summary-value--loss]="incomeStatement.netIncome < 0"
+              >
+                {{ incomeStatement.netIncome | currency }}
+              </p>
+              <p class="reports__summary-caption">Profit (or loss) after expenses.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="reports__categories" aria-labelledby="category-breakdown-heading">
+          <div class="reports__section-header">
+            <h2 id="category-breakdown-heading">Category Breakdown</h2>
+            <p>See which categories drive income and expenses.</p>
+          </div>
+          <div class="reports__category-grid">
+            <article class="reports__category-panel">
+              <header>
+                <h3>Income</h3>
+              </header>
+              <ul *ngIf="incomeStatement.incomeByCategory.length; else noIncomeCategories">
+                <li *ngFor="let category of incomeStatement.incomeByCategory">
+                  <span class="reports__category-name">{{ category.categoryName }}</span>
+                  <span class="reports__category-value">{{ category.total | currency }}</span>
+                </li>
+              </ul>
+              <ng-template #noIncomeCategories>
+                <p class="reports__empty">No income categories found yet.</p>
+              </ng-template>
+            </article>
+
+            <article class="reports__category-panel">
+              <header>
+                <h3>Expenses</h3>
+              </header>
+              <ul *ngIf="incomeStatement.expensesByCategory.length; else noExpenseCategories">
+                <li *ngFor="let category of incomeStatement.expensesByCategory">
+                  <span class="reports__category-name">{{ category.categoryName }}</span>
+                  <span class="reports__category-value">{{ category.total | currency }}</span>
+                </li>
+              </ul>
+              <ng-template #noExpenseCategories>
+                <p class="reports__empty">No expense categories found yet.</p>
+              </ng-template>
+            </article>
+          </div>
+        </section>
+
+        <section class="reports__trend" aria-labelledby="monthly-trend-heading">
+          <div class="reports__section-header">
+            <h2 id="monthly-trend-heading">Monthly Profit &amp; Loss</h2>
+            <p>Monitor how performance changes over time.</p>
+          </div>
+          <div class="reports__table-wrapper" role="region" aria-live="polite">
+            <table class="reports__table">
+              <thead>
+                <tr>
+                  <th scope="col">Month</th>
+                  <th scope="col">Income</th>
+                  <th scope="col">Expenses</th>
+                  <th scope="col">Net Income</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let month of incomeStatement.monthlyBreakdown; trackBy: trackByMonthKey">
+                  <th scope="row">{{ month.label }}</th>
+                  <td>{{ month.income | currency }}</td>
+                  <td>{{ month.expenses | currency }}</td>
+                  <td [class.reports__negative]="month.netIncome < 0">{{ month.netIncome | currency }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </ng-container>
+    </ng-container>
+  </ng-container>
 </section>
+
+<ng-template #reportsNoBusiness>
+  <section class="reports__empty-state">
+    <mat-icon aria-hidden="true">insights</mat-icon>
+    <h2>Select a business to view reports</h2>
+    <p>Choose a business from the dashboard to start analysing performance.</p>
+  </section>
+</ng-template>
+
+<ng-template #reportsNoData>
+  <section class="reports__empty-state">
+    <mat-icon aria-hidden="true">summarize</mat-icon>
+    <h2>No income statement yet</h2>
+    <p>Record income and expense transactions to generate your first profit and loss report.</p>
+  </section>
+</ng-template>
