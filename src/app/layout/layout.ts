@@ -5,9 +5,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { BusinessService } from '../services/business.service';
-import { filter } from 'rxjs';
+import { filter} from 'rxjs';
 
 @Component({
   selector: 'app-layout',
@@ -21,8 +21,7 @@ import { filter } from 'rxjs';
     MatListModule,
     MatIconModule,
     MatButtonModule,
-    CommonModule,
-    AsyncPipe
+    CommonModule
   ]
 })
 export class Layout {

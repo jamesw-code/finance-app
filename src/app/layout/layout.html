@@ -2,12 +2,6 @@
   <mat-sidenav mode="side" opened class="app-sidenav">
     <mat-toolbar color="primary" class="app-sidenav-toolbar">
       <div class="app-title">Finance App</div>
-      @if (selectedBusiness$ | async; as selectedBusiness) {
-        <div class="selected-business">
-          <span class="selected-business-label">Selected business</span>
-          <span class="selected-business-name">{{ selectedBusiness.name }}</span>
-        </div>
-      }
     </mat-toolbar>
 
     <mat-nav-list>
