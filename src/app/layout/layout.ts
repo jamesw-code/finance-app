@@ -52,7 +52,7 @@ export class Layout {
       child = child.firstChild;
     }
 
-    return child?.snapshot.data?.['title'];
+    return child?.snapshot?.data?.['title'];
   }
 
   private buildTitle(title: string): string {
