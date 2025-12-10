@@ -25,7 +25,7 @@ import { finalize } from 'rxjs/operators';
   ],
   templateUrl: './dashboard.html',
   standalone: true,
-  styleUrl: './dashboard.scss'
+  styleUrl: './dashboard.css'
 })
 export class Dashboard implements OnInit {
   businesses: Business[] = [];

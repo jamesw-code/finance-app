@@ -12,7 +12,7 @@ import { BusinessService } from '../services/business.service';
   selector: 'app-layout',
   templateUrl: './layout.html',
   standalone: true,
-  styleUrl: './layout.scss',
+  styleUrl: './layout.css',
   imports: [
     RouterModule,
     MatSidenavModule,

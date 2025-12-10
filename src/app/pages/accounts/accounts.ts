@@ -17,7 +17,7 @@ import { BusinessService } from '../../services/business.service';
   selector: 'app-accounts',
   standalone: true,
   templateUrl: './accounts.html',
-  styleUrl: './accounts.scss',
+  styleUrl: './accounts.css',
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -29,7 +29,7 @@ interface CategoryOption {
   selector: 'app-categories',
   standalone: true,
   templateUrl: './categories.html',
-  styleUrl: './categories.scss',
+  styleUrl: './categories.css',
   imports: [
     CommonModule,
     ReactiveFormsModule,

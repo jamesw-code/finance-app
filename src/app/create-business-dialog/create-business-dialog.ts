@@ -23,7 +23,7 @@ import { finalize } from 'rxjs/operators';
   ],
   templateUrl: './create-business-dialog.html',
   standalone: true,
-  styleUrl: './create-business-dialog.scss'
+  styleUrl: './create-business-dialog.css'
 })
 export class CreateBusinessDialog {
   business: Partial<Business> = {};

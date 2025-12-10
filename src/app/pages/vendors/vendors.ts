@@ -16,7 +16,7 @@ import { BusinessService } from '../../services/business.service';
   selector: 'app-vendors',
   standalone: true,
   templateUrl: './vendors.html',
-  styleUrl: './vendors.scss',
+  styleUrl: './vendors.css',
   imports: [
     CommonModule,
     ReactiveFormsModule,
