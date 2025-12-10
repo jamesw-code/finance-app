@@ -14,13 +14,13 @@ export const routes: Routes = [
     path: '',
     component: Layout,
     children: [
-      { path: 'dashboard', component: Dashboard },
-      { path: 'transactions', component: Transactions },
-      { path: 'vendors', component: Vendors },
-      { path: 'accounts/:accountId', component: AccountDetail },
-      { path: 'accounts', component: Accounts },
-      { path: 'categories', component: Categories },
-      { path: 'reports', component: Reports },
+      { path: 'dashboard', component: Dashboard, data: { title: 'Dashboard' } },
+      { path: 'transactions', component: Transactions, data: { title: 'Transactions' } },
+      { path: 'vendors', component: Vendors, data: { title: 'Vendors' } },
+      { path: 'accounts/:accountId', component: AccountDetail, data: { title: 'Account Details' } },
+      { path: 'accounts', component: Accounts, data: { title: 'Accounts' } },
+      { path: 'categories', component: Categories, data: { title: 'Categories' } },
+      { path: 'reports', component: Reports, data: { title: 'Reports' } },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
