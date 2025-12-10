@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -7,13 +7,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { BusinessService } from '../services/business.service';
-import { filter} from 'rxjs';
+import { filter, map } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.html',
   standalone: true,
   styleUrl: './layout.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     RouterModule,
     MatSidenavModule,
@@ -25,22 +27,23 @@ import { filter} from 'rxjs';
   ]
 })
 export class Layout {
-  readonly selectedBusiness$;
-  breadcrumbTitle = this.buildTitle('Dashboard');
+  private readonly businessService = inject(BusinessService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
-  constructor(
-    private readonly businessService: BusinessService,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute
-  ) {
-    this.selectedBusiness$ = this.businessService.selectedBusiness$;
-    this.router.events
-      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
-      .subscribe(() => {
-        const title = this.getCurrentRouteTitle(this.route) ?? 'Dashboard';
-        this.breadcrumbTitle = this.buildTitle(title);
-      });
-  }
+  readonly selectedBusiness = toSignal(this.businessService.selectedBusiness$, {
+    initialValue: null
+  });
+
+  private readonly routeTitle = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      map(() => this.getCurrentRouteTitle(this.route) ?? 'Dashboard')
+    ),
+    { initialValue: this.getCurrentRouteTitle(this.route) ?? 'Dashboard' }
+  );
+
+  readonly breadcrumbTitle = computed(() => this.buildTitle(this.routeTitle()));
 
   private getCurrentRouteTitle(route: ActivatedRoute): string | undefined {
     let child = route.firstChild;
