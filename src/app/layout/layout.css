@@ -33,6 +33,14 @@
   height: 100%;
 }
 
+.app-toolbar {
+  min-height: 64px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
 .app-main {
-  padding: 16px;
+  padding: 24px 16px 16px;
 }
