@@ -44,7 +44,7 @@ interface TransactionSplitForm {
   selector: 'app-transaction-form',
   standalone: true,
   templateUrl: './transaction-form.component.html',
-  styleUrl: './transaction-form.component.scss',
+  styleUrl: './transaction-form.component.css',
   imports: [
     CommonModule,
     ReactiveFormsModule,

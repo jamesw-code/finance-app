@@ -45,7 +45,7 @@ interface IncomeStatement {
   selector: 'app-reports',
   standalone: true,
   templateUrl: './reports.html',
-  styleUrl: './reports.scss',
+  styleUrl: './reports.css',
   imports: [CommonModule, MatIconModule, MatProgressSpinnerModule],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

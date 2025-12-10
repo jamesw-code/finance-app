@@ -14,7 +14,7 @@ import { TransactionFormComponent } from './transaction-form/transaction-form.co
   selector: 'app-transactions',
   standalone: true,
   templateUrl: './transactions.html',
-  styleUrl: './transactions.scss',
+  styleUrl: './transactions.css',
   imports: [CommonModule, RouterModule, MatButtonModule, MatDialogModule, DatePipe, CurrencyPipe]
 })
 export class Transactions implements OnInit, OnDestroy {

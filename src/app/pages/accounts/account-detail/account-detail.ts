@@ -17,7 +17,7 @@ import { TransactionFormComponent } from '../../transactions/transaction-form/tr
   selector: 'app-account-detail',
   standalone: true,
   templateUrl: './account-detail.html',
-  styleUrl: './account-detail.scss',
+  styleUrl: './account-detail.css',
   imports: [
     CommonModule,
     RouterModule,
