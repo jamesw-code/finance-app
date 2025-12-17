@@ -17,10 +17,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": {
-              "base": "src/main/resources/static",
-              "browser": ""
-            },
+            "outputPath": "dist/finance",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "css",
@@ -58,6 +55,7 @@
             "local": {
               "optimization": false,
               "sourceMap": true,
+              "outputHashing": "none",
               "outputPath": {
                 "base": "src/main/resources/static",
                 "browser": ""
