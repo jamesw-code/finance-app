@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Business } from '../model/business.model';
+import { BUSINESS_API } from '../api-domains';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BusinessService {
-  private readonly baseUrl = '/api/businesses';
   private readonly storageKey = 'selectedBusiness';
   private readonly selectedBusinessSubject = new BehaviorSubject<Business | null>(null);
   readonly selectedBusiness$ = this.selectedBusinessSubject.asObservable();
@@ -20,11 +20,11 @@ export class BusinessService {
   }
 
   getBusinesses(): Observable<Business[]> {
-    return this.http.get<Business[]>(this.baseUrl);
+    return this.http.get<Business[]>(BUSINESS_API);
   }
 
   createBusiness(business: Partial<Business>): Observable<Business> {
-    return this.http.post<Business>(this.baseUrl, business);
+    return this.http.post<Business>(BUSINESS_API, business);
   }
 
   setSelectedBusiness(business: Business | null): void {
@@ -64,7 +64,7 @@ export class BusinessService {
       return;
     }
 
-    localStorage.setItem(this.storageKey, JSON.stringify(business));
+    localStorage.setItem(this.storageKey, JSON.stringify(BUSINESS_API));
   }
 
   private hasStorage(): boolean {
