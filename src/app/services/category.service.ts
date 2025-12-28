@@ -2,17 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Category, CategoryKind } from '../model/category.model';
+import { BUSINESS_API } from '../api-domains';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  private readonly baseUrl = '/api/businesses';
-
   constructor(private readonly http: HttpClient) {}
 
   getCategoriesForBusiness(businessId: number): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.baseUrl}/${businessId}/categories`);
+    return this.http.get<Category[]>(`${BUSINESS_API}/${businessId}/categories`);
   }
 
   createCategory(
@@ -25,6 +24,6 @@ export class CategoryService {
       active: boolean;
     }
   ): Observable<Category> {
-    return this.http.post<Category>(`${this.baseUrl}/${businessId}/categories`, category);
+    return this.http.post<Category>(`${BUSINESS_API}/${businessId}/categories`, category);
   }
 }

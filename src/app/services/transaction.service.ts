@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CreateTransactionRequest, Transaction } from '../model/transaction.model';
+import { BUSINESS_API } from '../api-domains';
 
 export type CreateTransactionPayload = Omit<CreateTransactionRequest, 'businessId' | 'accountId'>;
 
@@ -9,16 +10,14 @@ export type CreateTransactionPayload = Omit<CreateTransactionRequest, 'businessI
   providedIn: 'root'
 })
 export class TransactionService {
-  private readonly baseUrl = '/api/businesses';
-
   constructor(private readonly http: HttpClient) {}
 
   getTransactionsForBusiness(businessId: number): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(`${this.baseUrl}/${businessId}/transactions`);
+    return this.http.get<Transaction[]>(`${BUSINESS_API}/${businessId}/transactions`);
   }
 
   getTransactionsForAccount(businessId: number, accountId: number): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(`${this.baseUrl}/${businessId}/accounts/${accountId}/transactions`);
+    return this.http.get<Transaction[]>(`${BUSINESS_API}/${businessId}/accounts/${accountId}/transactions`);
   }
 
   createTransaction(
@@ -28,7 +27,7 @@ export class TransactionService {
   ): Observable<Transaction> {
     const payload: CreateTransactionRequest = { ...transaction, businessId, accountId };
     return this.http.post<Transaction>(
-      `${this.baseUrl}/${businessId}/accounts/${accountId}/transactions`,
+      `${BUSINESS_API}/${businessId}/accounts/${accountId}/transactions`,
       payload
     );
   }

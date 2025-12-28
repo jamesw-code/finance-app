@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Vendor } from '../model/vendor.model';
+import { BUSINESS_API } from '../api-domains';
 
 export interface CreateVendorRequest {
   name: string;
@@ -15,15 +16,13 @@ export interface CreateVendorRequest {
   providedIn: 'root'
 })
 export class VendorService {
-  private readonly baseUrl = '/api/businesses';
-
   constructor(private readonly http: HttpClient) {}
 
   getVendorsForBusiness(businessId: number): Observable<Vendor[]> {
-    return this.http.get<Vendor[]>(`${this.baseUrl}/${businessId}/vendors`);
+    return this.http.get<Vendor[]>(`${BUSINESS_API}/${businessId}/vendors`);
   }
 
   createVendor(businessId: number, vendor: CreateVendorRequest): Observable<Vendor> {
-    return this.http.post<Vendor>(`${this.baseUrl}/${businessId}/vendors`, vendor);
+    return this.http.post<Vendor>(`${BUSINESS_API}/${businessId}/vendors`, vendor);
   }
 }
