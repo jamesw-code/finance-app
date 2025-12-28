@@ -19,3 +19,17 @@ body {
   background-color: #f7f9fc;
   color: #0f172a;
 }
+
+/* Prevent the outline on Material selects from rendering a visible seam through the control */
+.mat-mdc-form-field-appearance-outline .mdc-notched-outline__leading {
+  border-right: 0;
+}
+
+.mat-mdc-form-field-appearance-outline .mdc-notched-outline__notch {
+  border-left: 0;
+  border-right: 0;
+}
+
+.mat-mdc-form-field-appearance-outline .mdc-notched-outline__trailing {
+  border-left: 0;
+}
