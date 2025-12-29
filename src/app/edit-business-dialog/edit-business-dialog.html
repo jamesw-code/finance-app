@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Edit Business</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Business Name</mat-label>
+    <input matInput [(ngModel)]="business.name" />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Tax ID</mat-label>
+    <input matInput [(ngModel)]="business.taxId" />
+  </mat-form-field>
+  @if (errorMessage) {
+    <p class="error-message">{{ errorMessage }}</p>
+  }
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()" [disabled]="isSaving">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="isSaving || !business.name.trim()">
+    {{ isSaving ? 'Saving…' : 'Save changes' }}
+  </button>
+</div>

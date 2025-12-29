@@ -72,6 +72,98 @@
   font-weight: 600;
 }
 
+.business-list {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.list-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.list-heading h2 {
+  margin: 0;
+}
+
+.list-subtitle {
+  margin: 4px 0 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.count-chip {
+  background: rgba(25, 118, 210, 0.08);
+  color: #1976d2;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.business-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.business-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.01);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.business-card.selected {
+  border-color: rgba(25, 118, 210, 0.35);
+  box-shadow: 0 6px 18px rgba(25, 118, 210, 0.12);
+  background: rgba(25, 118, 210, 0.03);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.business-name {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.business-meta {
+  margin: 4px 0 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.selected-pill {
+  background: rgba(25, 118, 210, 0.12);
+  color: #0d47a1;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.business-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .summary-card {
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 12px;

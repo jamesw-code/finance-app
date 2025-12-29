@@ -33,6 +33,46 @@
     </section>
   }
 
+  @if (!isLoading && !errorMessage && businesses.length) {
+    <section class="business-list">
+      <div class="list-heading">
+        <div>
+          <h2>Businesses</h2>
+          <p class="list-subtitle">View, edit, or remove any business from your account.</p>
+        </div>
+        <span class="count-chip">{{ businesses.length }} total</span>
+      </div>
+
+      <div class="business-grid">
+        @for (biz of businesses; track biz.id) {
+          <div class="business-card" [class.selected]="biz.id === selectedBusinessId">
+            <div class="card-header">
+              <div>
+                <p class="business-name">{{ biz.name }}</p>
+                <p class="business-meta">Tax ID: {{ biz.taxId || 'Not provided' }}</p>
+              </div>
+              @if (biz.id === selectedBusinessId) {
+                <span class="selected-pill">Selected</span>
+              }
+            </div>
+
+            <div class="business-actions">
+              <button mat-stroked-button color="primary" (click)="onSelectBusiness(biz.id)">
+                View summary
+              </button>
+              <button mat-stroked-button (click)="openEditDialog(biz)">
+                Edit
+              </button>
+              <button mat-stroked-button color="warn" (click)="deleteBusiness(biz)" [disabled]="isDeleting(biz.id)">
+                {{ isDeleting(biz.id) ? 'Deleting…' : 'Delete' }}
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
   @if (selectedBusiness) {
     <section class="summary-card">
       <h2>Welcome to {{ selectedBusiness.name }}</h2>

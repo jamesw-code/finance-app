@@ -27,6 +27,14 @@ export class BusinessService {
     return this.http.post<Business>(BUSINESS_API, business);
   }
 
+  updateBusiness(id: number, updates: Partial<Business>): Observable<Business> {
+    return this.http.put<Business>(`${BUSINESS_API}/${id}`, updates);
+  }
+
+  deleteBusiness(id: number): Observable<void> {
+    return this.http.delete<void>(`${BUSINESS_API}/${id}`);
+  }
+
   setSelectedBusiness(business: Business | null): void {
     this.selectedBusinessSubject.next(business);
     this.persistSelectedBusiness(business);
@@ -64,7 +72,7 @@ export class BusinessService {
       return;
     }
 
-    localStorage.setItem(this.storageKey, JSON.stringify(BUSINESS_API));
+    localStorage.setItem(this.storageKey, JSON.stringify(business));
   }
 
   private hasStorage(): boolean {
