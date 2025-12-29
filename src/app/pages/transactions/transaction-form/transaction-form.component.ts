@@ -18,6 +18,9 @@ import { MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 import { finalize, forkJoin, of, Subscription } from 'rxjs';
 import { Account } from '../../../model/account.model';
 import { Category } from '../../../model/category.model';
@@ -52,6 +55,9 @@ interface TransactionSplitForm {
     MatFormField,
     MatLabel,
     MatInput,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
     MatSelectModule,
     MatButtonModule
   ]
@@ -70,7 +76,7 @@ export class TransactionFormComponent implements OnInit, OnDestroy {
 
   readonly transactionForm = this.fb.group({
     accountId: this.fb.control<number | null>(null, { validators: [Validators.required] }),
-    postedAt: this.fb.nonNullable.control('', { validators: [Validators.required] }),
+    postedAt: this.fb.control<Date | null>(null, { validators: [Validators.required] }),
     payee: this.fb.nonNullable.control('', { validators: [Validators.required] }),
     memo: this.fb.control(''),
     amount: this.fb.control<number | null>(null, { validators: [Validators.required] }),
@@ -95,8 +101,7 @@ export class TransactionFormComponent implements OnInit, OnDestroy {
   readonly isAccountLocked = this.lockedAccountId != null;
 
   ngOnInit(): void {
-    const today = new Date().toISOString().slice(0, 10);
-    this.transactionForm.controls.postedAt.setValue(today);
+    this.transactionForm.controls.postedAt.setValue(new Date());
 
     if (this.isAccountLocked) {
       this.transactionForm.controls.accountId.setValue(this.lockedAccountId);
@@ -151,6 +156,12 @@ export class TransactionFormComponent implements OnInit, OnDestroy {
     }
 
     const rawValue = this.transactionForm.getRawValue();
+    const postedAt = rawValue.postedAt;
+    if (!postedAt) {
+      this.formError = 'Posted date is required.';
+      this.cdr.markForCheck();
+      return;
+    }
     const accountId = rawValue.accountId;
     if (accountId == null) {
       this.formError = 'Select an account for the transaction.';
@@ -196,7 +207,7 @@ export class TransactionFormComponent implements OnInit, OnDestroy {
 
     const payload: CreateTransactionPayload = {
       payee: trimmedPayee,
-      postedAt: rawValue.postedAt,
+      postedAt: this.formatDate(postedAt),
       amount: Number(rawValue.amount),
       memo: rawValue.memo?.trim() || undefined,
       vendorId: rawValue.vendorId ?? undefined,
@@ -237,6 +248,13 @@ export class TransactionFormComponent implements OnInit, OnDestroy {
 
   trackBySplitIndex(_index: number, _item: unknown): number {
     return _index;
+  }
+
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day = `${date.getDate()}`.padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   private createSplitGroup(): FormGroup<TransactionSplitForm> {

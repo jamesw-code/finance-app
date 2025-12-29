@@ -39,7 +39,9 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Posted date</mat-label>
-        <input matInput type="date" formControlName="postedAt" required />
+        <input matInput [matDatepicker]="postedAtPicker" formControlName="postedAt" required />
+        <mat-datepicker-toggle matSuffix [for]="postedAtPicker"></mat-datepicker-toggle>
+        <mat-datepicker #postedAtPicker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
