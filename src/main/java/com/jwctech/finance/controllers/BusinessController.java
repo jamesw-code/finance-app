@@ -6,7 +6,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +35,12 @@ public class BusinessController {
     public ResponseEntity<BusinessDto> createBusiness(@Valid @RequestBody CreateBusinessRequest request) {
         BusinessDto savedBusiness = businessService.createBusiness(request.name(), request.taxId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBusiness);
+    }
+
+    @DeleteMapping("/{businessId}")
+    public ResponseEntity<Void> deleteBusiness(@PathVariable Long businessId) {
+        businessService.deleteBusiness(businessId);
+        return ResponseEntity.noContent().build();
     }
 
     public record CreateBusinessRequest(@NotBlank String name, String taxId) {

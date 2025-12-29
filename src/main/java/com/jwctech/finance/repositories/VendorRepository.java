@@ -12,4 +12,6 @@ public interface VendorRepository extends JpaRepository<Vendor, Long> {
     boolean existsByNameIgnoreCaseAndBusiness_Id(String name, Long businessId);
 
     Optional<Vendor> findByIdAndBusiness_Id(Long vendorId, Long businessId);
+
+    void deleteByBusiness_Id(Long businessId);
 }

@@ -4,8 +4,11 @@ import com.jwctech.finance.dto.BusinessDto;
 import com.jwctech.finance.entities.Business;
 import com.jwctech.finance.entities.Category;
 import com.jwctech.finance.entities.CategoryKind;
+import com.jwctech.finance.repositories.AccountRepository;
 import com.jwctech.finance.repositories.BusinessRepository;
 import com.jwctech.finance.repositories.CategoryRepository;
+import com.jwctech.finance.repositories.TransactionRepository;
+import com.jwctech.finance.repositories.VendorRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,10 +24,20 @@ public class BusinessService {
 
     private final BusinessRepository businessRepository;
     private final CategoryRepository categoryRepository;
+    private final AccountRepository accountRepository;
+    private final VendorRepository vendorRepository;
+    private final TransactionRepository transactionRepository;
 
-    public BusinessService(BusinessRepository businessRepository, CategoryRepository categoryRepository) {
+    public BusinessService(BusinessRepository businessRepository,
+                           CategoryRepository categoryRepository,
+                           AccountRepository accountRepository,
+                           VendorRepository vendorRepository,
+                           TransactionRepository transactionRepository) {
         this.businessRepository = businessRepository;
         this.categoryRepository = categoryRepository;
+        this.accountRepository = accountRepository;
+        this.vendorRepository = vendorRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     public List<BusinessDto> getBusinesses() {
@@ -52,6 +65,18 @@ public class BusinessService {
         Business savedBusiness = businessRepository.save(business);
         createDefaultCategories(savedBusiness);
         return toDto(savedBusiness);
+    }
+
+    @Transactional
+    public void deleteBusiness(Long businessId) {
+        Business business = businessRepository.findById(businessId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Business not found."));
+
+        transactionRepository.deleteByBusiness_Id(businessId);
+        accountRepository.deleteByBusiness_Id(businessId);
+        vendorRepository.deleteByBusiness_Id(businessId);
+        categoryRepository.deleteByBusiness_Id(businessId);
+        businessRepository.delete(business);
     }
 
     private void createDefaultCategories(Business business) {
