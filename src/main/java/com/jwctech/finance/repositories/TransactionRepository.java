@@ -13,4 +13,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @EntityGraph(attributePaths = {"account", "vendor", "splits", "splits.category"})
     List<Transaction> findByAccount_IdAndBusiness_IdOrderByPostedAtDescCreatedAtDesc(Long accountId, Long businessId);
+
+    void deleteByBusiness_Id(Long businessId);
 }

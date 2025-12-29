@@ -12,4 +12,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsByNameIgnoreCaseAndBusiness_Id(String name, Long businessId);
 
     Optional<Category> findByIdAndBusiness_Id(Long id, Long businessId);
+
+    void deleteByBusiness_Id(Long businessId);
 }
